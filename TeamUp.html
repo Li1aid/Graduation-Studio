@@ -1005,30 +1005,30 @@
         background: rgba(20, 20, 20, 1);
       }
 
-      .nav-menu.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .nav-menu.active li {
+      .nav-menu li {
         width: 100%;
       }
 
-      .nav-menu.active .nav-link {
+      .nav-menu .nav-link {
         display: block;
         padding: 1rem;
         border-radius: 8px;
         text-align: center;
       }
 
-      .nav-menu.active .nav-link::after {
+      .nav-menu .nav-link::after {
         display: none;
       }
 
-      .nav-menu.active .nav-link:hover,
-      .nav-menu.active .nav-link.active {
+      .nav-menu .nav-link:hover,
+      .nav-menu .nav-link.active {
         background: var(--page-bg);
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
       }
 
       .wrap {
