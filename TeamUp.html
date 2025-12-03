@@ -85,17 +85,18 @@
       font-family: 'Merriweather', serif
     }
 
-    /* ===== Glass Navbar (一致风格 + 入场动效) ===== */
+    /* ===== Navigation Bar ===== */
     .navbar {
       position: fixed;
-      inset: 0 auto auto 0;
+      top: 0;
+      left: 0;
       right: 0;
       z-index: 1000;
       background: var(--glass-bg);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--glass-border);
-      transition: all .4s var(--ease);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .navbar.scrolled {
@@ -109,56 +110,30 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      opacity: 0;
-      transform: translateY(-8px);
-      animation: navIn .4s var(--ease) .12s forwards;
-    }
-
-    @keyframes navIn {
-      to {
-        opacity: 1;
-        transform: none
-      }
+      gap: 24px;
     }
 
     .logo-link {
       display: flex;
       align-items: center;
       text-decoration: none;
-      transition: transform .3s ease
+      transition: transform 0.3s ease;
     }
 
     .logo-link:hover {
-      transform: scale(1.05)
+      transform: scale(1.05);
     }
 
     .logo-img {
       height: 90px;
       width: auto;
-      object-fit: contain
+      object-fit: contain;
     }
 
     .nav-menu {
       display: flex;
       gap: 3rem;
-      list-style: none
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 28px;
-      color: var(--mid-grey);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 0;
-      margin-left: auto;
-    }
-
-    .mobile-menu-btn:hover {
-      color: var(--primary-orange);
-      transform: scale(1.1);
+      list-style: none;
     }
 
     .nav-link {
@@ -166,17 +141,16 @@
       color: var(--mid-grey);
       text-decoration: none;
       font-weight: 500;
-      /* 比 600 更细，与你的示范一致 */
-      padding: .5rem 0;
-      transition: color .3s ease;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
     }
 
     .nav-link:hover {
-      color: var(--primary-orange)
+      color: var(--primary-orange);
     }
 
     .nav-link.active {
-      color: var(--primary-orange)
+      color: var(--primary-orange);
     }
 
     .nav-link::after {
@@ -188,21 +162,37 @@
       width: 0;
       height: 2px;
       background: linear-gradient(90deg, var(--primary-orange), var(--orange-light));
-      transition: width .4s var(--ease);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .nav-link:hover::after,
     .nav-link.active::after {
-      width: 100%
+      width: 100%;
     }
 
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 1.5rem
+      gap: 1.5rem;
     }
 
-    /* Theme switch */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--mid-grey);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--primary-orange);
+      transform: scale(1.1);
+    }
+
+    /* ===== Theme switch styles ===== */
     .theme-switch {
       position: relative;
       display: inline-block;
@@ -962,6 +952,18 @@
     }
 
     @media (max-width:720px) {
+      .navbar {
+        height: 60px;
+      }
+
+      .nav-container {
+        padding: 0.75rem 1.5rem;
+      }
+
+      .logo-img {
+        height: 50px;
+      }
+
       .grid {
         grid-template-columns: repeat(6, 1fr)
       }
@@ -972,10 +974,6 @@
 
       .row {
         grid-template-columns: 46px 1.2fr 1.6fr auto
-      }
-
-      .nav-container {
-        padding: 1rem 1.75rem
       }
 
       .mobile-menu-btn {
@@ -1135,6 +1133,44 @@
       background: rgba(27, 94, 32, .25);
       color: #BDEDCB;
       border-color: rgba(189, 237, 203, .35)
+    }
+
+    @media (max-width: 480px) {
+      .nav-container {
+        padding: 0.5rem 1rem;
+      }
+
+      .logo-img {
+        height: 35px;
+      }
+
+      .nav-right {
+        gap: 0.75rem;
+      }
+
+      .theme-switch {
+        width: 50px;
+        height: 28px;
+      }
+
+      .slider::before {
+        height: 20px;
+        width: 20px;
+        left: 2px;
+      }
+
+      .theme-switch input:checked~.slider::before {
+        transform: translateY(-50%) translateX(20px);
+      }
+
+      .profile-btn {
+        width: 38px;
+        height: 38px;
+      }
+
+      .wrap {
+        margin-top: 70px;
+      }
     }
   </style>
 </head>

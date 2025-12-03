@@ -66,7 +66,7 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
-        /* ==================== UPDATED NAVIGATION BAR (Tutorial Style) ==================== */
+        /* Navigation Bar */
         .navbar {
             position: fixed;
             top: 0;
@@ -74,14 +74,13 @@
             right: 0;
             z-index: 1000;
             background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .navbar.scrolled {
-            background: var(--glass-bg);
             box-shadow: var(--shadow-md);
         }
 
@@ -92,6 +91,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 24px;
         }
 
         .logo-link {
@@ -101,14 +101,14 @@
             transition: transform 0.3s ease;
         }
 
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
         .logo-img {
             height: 90px;
             width: auto;
             object-fit: contain;
-        }
-
-        .logo-link:hover {
-            transform: scale(1.05);
         }
 
         .nav-menu {
@@ -479,7 +479,7 @@
 
         /* ==================== MAIN CONTENT ==================== */
         .main-container {
-            margin-top: 128px;
+            margin-top: 140px;
             padding: 0 64px 80px;
             max-width: 1680px;
             margin-left: auto;
@@ -834,11 +834,15 @@
 
         /* ==================== RIGHT COLUMN - SIDEBAR ==================== */
         .sidebar {
-            position: sticky;
-            top: 120px;
+            position: fixed;
+            top: 140px;
+            right: 64px;
+            width: 440px;
             display: flex;
             flex-direction: column;
             gap: 32px;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
         }
 
         .info-card {
@@ -1149,11 +1153,15 @@
             }
 
             .sidebar {
-                position: relative;
-                top: 0;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                position: fixed;
+                top: 130px;
+                right: 40px;
+                width: 360px;
+                display: flex;
+                flex-direction: column;
                 gap: 24px;
+                height: calc(100vh - 150px);
+                overflow-y: auto;
             }
         }
 
@@ -1164,6 +1172,7 @@
             
             .main-container {
                 padding: 0 40px 60px;
+                margin-top: 130px;
             }
             
             .nav-menu {
@@ -1172,12 +1181,20 @@
         }
 
         @media (max-width: 768px) {
+            .navbar {
+                height: 60px;
+            }
+
             .nav-container {
-                padding: 1rem 1.75rem;
+                padding: 0.75rem 1.5rem;
             }
 
             .logo-img {
-                height: 70px;
+                height: 50px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
             }
 
             .nav-menu {
@@ -1197,10 +1214,6 @@
 
             .nav-menu.active {
                 left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
             }
 
             .main-container {
@@ -1234,16 +1247,22 @@
             }
             
             .sidebar {
+                position: fixed;
+                top: 120px;
+                right: 28px;
+                width: 300px;
                 display: flex;
                 flex-direction: column;
                 gap: 24px;
+                height: calc(100vh - 140px);
+                overflow-y: auto;
             }
         }
 
         @media (max-width: 640px) {
             .main-container {
                 padding: 0 16px 60px;
-                margin-top: 110px;
+                margin-top: 100px;
             }
             
             .lecture-details {
@@ -1341,7 +1360,35 @@
 
         @media (max-width: 480px) {
             .nav-container {
-                padding: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .logo-img {
+                height: 35px;
+            }
+
+            .nav-right {
+                gap: 0.75rem;
+            }
+
+            .theme-switch {
+                width: 50px;
+                height: 28px;
+            }
+
+            .slider::before {
+                height: 20px;
+                width: 20px;
+                left: 2px;
+            }
+
+            .theme-switch input:checked~.slider::before {
+                transform: translateY(-50%) translateX(20px);
+            }
+
+            .profile-btn {
+                width: 38px;
+                height: 38px;
             }
             
             .main-container {
