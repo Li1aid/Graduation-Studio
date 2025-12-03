@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - CoLab</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/home.css">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-link">
+                <img src="Assets/Logo.png" alt="University Logo" class="logo-img">
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="Lecture.html" class="nav-link gate-link" data-label="Lecture">Lecture</a></li>
+                <li><a href="Tut.html" class="nav-link gate-link" data-label="Tutorial">Tutorial</a></li>
+                <li><a href="https://canvas.sydney.edu.au/" class="nav-link" target="_blank">Canvas</a></li>
+                <li><a href="TeamUp.html" class="nav-link gate-link" data-label="TeamUp">TeamUp</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <!-- 汉堡菜单按钮 (移动端) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span class="menu-icon">☰</span>
+                </button>
+
+                <!-- 主题切换 -->
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <span class="sun">☀️</span>
+                        <span class="moon">🌙</span>
+                    </span>
+                </label>
+
+                <!-- 头像按钮 -->
+                <a href="Avatar1.html" class="profile-btn" id="profileAnchor" aria-label="Profile"></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 菜单遮罩 (移动端) -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- 主内容 -->
+    <div class="card-wrapper">
+        <section class="section-card">
+            <div class="card-grid">
+                <!-- 卡片 1: IDEA9105 Interface Design -->
+                <article class="vcard">
+                    <div class="vcard-img">
+                        <img src="Assets/9105.png" alt="IDEA9105 Interface Design">
+                    </div>
+                    <div class="vcard-body">
+                        <h3 class="vcard-title">IDEA9105 Interface Design</h3>
+                        <div class="vcard-tags">
+                            <span class="tag">UI/UX Design</span>
+                            <span class="tag">Prototyping</span>
+                            <span class="tag">Usability Testing</span>
+                            <span class="tag">Multi-platform</span>
+                        </div>
+                        <div class="vcard-links">
+                            <a class="meta-badge gate-link" href="Lecture.html" data-label="Lecture">Lecture</a>
+                            <a class="meta-badge gate-link" href="Tut.html" data-label="Tutorial">Tutorial</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 卡片 2: IDEA9106 Design Thinking -->
+                <article class="vcard">
+                    <div class="vcard-img">
+                        <img src="Assets/9106.png" alt="IDEA9106 Design Thinking">
+                    </div>
+                    <div class="vcard-body">
+                        <h3 class="vcard-title">IDEA9106 Design Thinking</h3>
+                        <div class="vcard-tags">
+                            <span class="tag">User Research</span>
+                            <span class="tag">Ideation</span>
+                            <span class="tag">Human-Centered</span>
+                            <span class="tag">Visual Storytelling</span>
+                        </div>
+                        <div class="vcard-links">
+                            <a class="meta-badge gate-link" href="Lecture.html" data-label="Lecture">Lecture</a>
+                            <a class="meta-badge gate-link" href="Tut.html" data-label="Tutorial">Tutorial</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 卡片 3: IDEA9103 Creative Coding -->
+                <article class="vcard">
+                    <div class="vcard-img">
+                        <img src="Assets/9103.png" alt="IDEA9103 Creative Coding">
+                    </div>
+                    <div class="vcard-body">
+                        <h3 class="vcard-title">IDEA9103 Creative Coding</h3>
+                        <div class="vcard-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Interactive Design</span>
+                            <span class="tag">Web Development</span>
+                            <span class="tag">Prototyping</span>
+                        </div>
+                        <div class="vcard-links">
+                            <a class="meta-badge gate-link" href="Lecture.html" data-label="Lecture">Lecture</a>
+                            <a class="meta-badge gate-link" href="Tut.html" data-label="Tutorial">Tutorial</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 卡片 4: DESN9004 Design Practices -->
+                <article class="vcard">
+                    <div class="vcard-img">
+                        <img src="Assets/9004.png" alt="DESN9004 Design Practices">
+                    </div>
+                    <div class="vcard-body">
+                        <h3 class="vcard-title">DESN9004 Design Practices</h3>
+                        <div class="vcard-tags">
+                            <span class="tag">Innovation</span>
+                            <span class="tag">Critical Thinking</span>
+                            <span class="tag">Research Methods</span>
+                            <span class="tag">Design Strategy</span>
+                        </div>
+                        <div class="vcard-links">
+                            <a class="meta-badge gate-link" href="Lecture.html" data-label="Lecture">Lecture</a>
+                            <a class="meta-badge gate-link" href="Tut.html" data-label="Tutorial">Tutorial</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/navigation.js"></script>
+    <script src="scripts/profile.js"></script>
+    <script src="scripts/home.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:wght@800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --primary-orange: #F26B38;
+      --orange-light: #FF8C5A;
+      --orange-glow: rgba(242, 107, 56, .25);
+      --deep-black: #0A0A0A;
+      --charcoal: #1A1A1A;
+      --dark-grey: #2D2D2D;
+      --mid-grey: #6E6E6E;
+      --light-grey: #DADADA;
+      --ultra-light: #F2F2F2;
+      --pure-white: #FFFFFF;
+      --card-bg: #FFFFFF;
+      --page-bg: #F8F8F8;
+      --border-color: #E5E5E5;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, .04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, .08);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, .12);
+      --shadow-xl: 0 16px 48px rgba(0, 0, 0, .16);
+      --transition-smooth: all .28s cubic-bezier(.4, 0, .2, 1);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --glass-bg: rgba(255, 255, 255, .8);
+      --glass-border: rgba(0, 0, 0, .06);
+    }
+
+    [data-theme="dark"] {
+      --deep-black: #FAFAFA;
+      --charcoal: #E8E8E8;
+      --dark-grey: #CCCCCC;
+      --mid-grey: #999999;
+      --light-grey: #404040;
+      --ultra-light: #2A2A2A;
+      --pure-white: #FAFAFA;
+      --card-bg: #1E1E1E;
+      --page-bg: #121212;
+      --border-color: #333333;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, .4);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, .5);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, .6);
+      --shadow-xl: 0 16px 48px rgba(0, 0, 0, .7);
+      --glass-bg: rgba(26, 26, 26, .8);
+      --glass-border: rgba(255, 255, 255, .06);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--page-bg);
+      color: var(--deep-black);
+      line-height: 1.7;
+      overflow-x: hidden;
+      transition: background .5s ease, color .5s ease;
+      
+    }
+
+    @keyframes bodyIn {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Merriweather', serif
+    }
+
+    /* ===== Glass Navbar (一致风格 + 入场动效) ===== */
+    .navbar {
+      position: fixed;
+      inset: 0 auto auto 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: all .4s var(--ease);
+    }
+
+    .navbar.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 1rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(-8px);
+      animation: navIn .4s var(--ease) .12s forwards;
+    }
+
+    @keyframes navIn {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: transform .3s ease
+    }
+
+    .logo-link:hover {
+      transform: scale(1.05)
+    }
+
+    .logo-img {
+      height: 90px;
+      width: auto;
+      object-fit: contain
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 3rem;
+      list-style: none
+    }
+
+    .nav-link {
+      position: relative;
+      color: var(--mid-grey);
+      text-decoration: none;
+      font-weight: 500;
+      /* 比 600 更细，与你的示范一致 */
+      padding: .5rem 0;
+      transition: color .3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-orange)
+    }
+
+    .nav-link.active {
+      color: var(--primary-orange)
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-orange), var(--orange-light));
+      transition: width .4s var(--ease);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem
+    }
+
+    /* Theme switch */
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 32px
+    }
+
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 34px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+      transition: all .4s var(--ease);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .slider-icon {
+      font-size: 14px;
+      transition: opacity .3s ease
+    }
+
+    .slider-icon.sun {
+      opacity: 1
+    }
+
+    .slider-icon.moon {
+      opacity: .3
+    }
+
+    .theme-switch input:checked~.slider {
+      background: var(--primary-orange);
+      border-color: var(--primary-orange)
+    }
+
+    .theme-switch input:checked~.slider .sun {
+      opacity: .3
+    }
+
+    .theme-switch input:checked~.slider .moon {
+      opacity: 1
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      height: 24px;
+      width: 24px;
+      left: 4px;
+      bottom: 2px;
+      background: #fff;
+      border-radius: 50%;
+      transition: all .4s var(--ease);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+    }
+
+    .theme-switch input:checked~.slider::before {
+      transform: translateX(28px)
+    }
+
+    /* Profile button (无下拉前的按钮) */
+    .profile-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--mid-grey);
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .profile-btn:hover {
+      transform: scale(1.1);
+      border-color: var(--primary-orange);
+      color: var(--primary-orange);
+      box-shadow: var(--shadow-md)
+    }
+
+    .profile-btn-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: fixed;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            z-index: 10001;
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+            overflow: hidden;
+        }
+        
+        .profile-dropdown.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            visibility: visible;
+        }
+        
+        .profile-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 25px;
+            width: 16px;
+            height: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-right: none;
+            border-bottom: none;
+            transform: rotate(45deg);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(242, 107, 56, 0.1), rgba(242, 107, 56, 0.05));
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
+            animation: float 3s ease-in-out infinite;
+            overflow: hidden;
+            border: 2px solid var(--primary-orange);
+        }
+        
+        .profile-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--deep-black);
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-email {
+            font-size: 0.85rem;
+            color: var(--mid-grey);
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 1.5rem;
+            background: var(--page-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 0.5rem;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .stat-item:last-child {
+            border-right: none;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 0.25rem;
+            animation: countUp 1s ease-out;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--mid-grey);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .profile-menu {
+            padding: 0.5rem;
+        }
+        
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.2rem;
+            color: var(--mid-grey);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(242, 107, 56, 0.1));
+            transition: width 0.3s ease;
+        }
+        
+        .profile-menu-item:hover {
+            background: var(--page-bg);
+            color: var(--primary-orange);
+            transform: translateX(5px);
+        }
+        
+        .profile-menu-item:hover::before {
+            width: 100%;
+        }
+        
+        .profile-menu-item.logout {
+            color: #e74c3c;
+        }
+        
+        .profile-menu-item.logout:hover {
+            background: rgba(231, 76, 60, 0.1);
+            color: #c0392b;
+        }
+        
+        .profile-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--dark-grey);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--primary-orange);
+            transform: scale(1.1);
+        }
+
+    /* ===== Page content & 入场 ===== */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      margin-top: 128px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: wrapIn .45s var(--ease) .18s forwards;
+    }
+
+    @keyframes wrapIn {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .hero {
+      margin: 8px 0 16px
+    }
+
+    .hero h1 {
+      font-weight: 900;
+      font-size: 2.2rem;
+      margin: 0 0 6px;
+      color: #111
+    }
+
+    .hero p {
+      color: var(--mid-grey);
+      margin: 0
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+
+    .search {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: var(--shadow-sm);
+      max-width: none;
+      width: 100%;
+      margin: 0 0;
+    }
+
+    .search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      color: var(--deep-black)
+    }
+
+    .seg {
+      display: flex;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      overflow: hidden;
+      background: #fff
+    }
+
+    .seg button {
+      border: none;
+      padding: 8px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      background: #fff;
+      color: var(--deep-black);
+      transition: var(--transition-smooth)
+    }
+
+    .seg button.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-orange), var(--orange-light));
+      box-shadow: 0 8px 18px var(--orange-glow)
+    }
+
+    .btn-toggle {
+      border: 1px solid var(--border-color);
+      background: #fff;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      color: var(--deep-black)
+    }
+
+    .btn-toggle.active {
+      background: linear-gradient(135deg, var(--primary-orange), var(--orange-light));
+      color: #fff;
+      border: none;
+      box-shadow: 0 8px 18px var(--orange-glow)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px
+    }
+
+    .card {
+      grid-column: span 4;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: cardIn .45s var(--ease) .24s forwards;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: .28s
+    }
+
+    .card:nth-child(3) {
+      animation-delay: .32s
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg)
+    }
+
+    @keyframes cardIn {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .head {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #fff, #FFFCF7)
+    }
+
+    .ava {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #FFE7DD;
+      border: 2px solid #FFD3C1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #B33E17;
+      flex: none;
+      overflow: hidden
+    }
+
+    .ava-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block
+    }
+
+    .nm {
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 8px;
+      row-gap: 12px;
+      padding: 12px 16px
+    }
+
+    .tag {
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: #fafafa;
+      font-weight: 700;
+      font-size: .86rem;
+      color: #111
+    }
+
+    .foot {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border-color)
+    }
+
+    /* 星号与 Save 同行对齐 */
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: #fff;
+      padding: 8px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #111;
+    }
+
+    .btn-ghost svg {
+      display: block;
+      width: 18px;
+      height: 18px
+    }
+
+    .btn-pri {
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-orange), var(--orange-light));
+      color: #fff;
+      padding: 9px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px var(--orange-glow)
+    }
+
+    .list {
+      display: none
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 60px 1.6fr 2fr auto;
+      gap: 12px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-md);
+      cursor: pointer
+    }
+
+    .row+.row {
+      margin-top: 12px
+    }
+
+    .row .ava {
+      width: 46px;
+      height: 46px
+    }
+
+    .row .nm {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .row .tags {
+      padding: 0
+    }
+
+    .row .foot {
+      border-top: none;
+      margin: 0;
+      padding: 0;
+      gap: 8px
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      background: #EAFBF1;
+      color: #0E7A45;
+      border: 1px solid #BFEAD1
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999
+    }
+
+    .modal.open {
+      display: flex
+    }
+
+    .modal-card {
+      width: min(560px, 92vw);
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden
+    }
+
+    .modal-h {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 900
+    }
+
+    .modal-b {
+      padding: 18px 20px;
+      line-height: 1.7
+    }
+
+    .modal-b .sec {
+      margin: 10px 0
+    }
+
+    .modal-f {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px
+    }
+
+    .chat-card {
+      width: min(720px, 95vw)
+    }
+
+    .chat-body {
+      display: flex;
+      flex-direction: column;
+      height: min(65vh, 640px)
+    }
+
+    .msgs {
+      flex: 1;
+      overflow: auto;
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px;
+      background: #fff
+    }
+
+    .msg {
+      max-width: 70%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      margin: 6px 0;
+      box-shadow: var(--shadow-sm)
+    }
+
+    .me {
+      background: #FFF4ED;
+      border: 1px solid #FFD3C1;
+      margin-left: auto
+    }
+
+    .peer {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color)
+    }
+
+    .composer {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: #fff
+    }
+
+    .composer input {
+      flex: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 1rem
+    }
+
+    .composer button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer
+    }
+
+    .send {
+      background: #0A0A0A;
+      color: #fff
+    }
+
+    .teamup {
+      background: linear-gradient(135deg, var(--primary-orange), var(--orange-light));
+      color: #fff
+    }
+
+    .empty {
+      padding: 32px;
+      border: 1px dashed var(--border-color);
+      border-radius: 16px;
+      background: #fff;
+      color: #666;
+      text-align: center;
+      box-shadow: var(--shadow-sm)
+    }
+
+    .empty h3 {
+      margin: 0 0 10px
+    }
+
+    .empty .btn {
+      margin-top: 8px
+    }
+
+    @media (max-width:1100px) {
+      .card {
+        grid-column: span 6
+      }
+    }
+
+    @media (max-width:720px) {
+      .grid {
+        grid-template-columns: repeat(6, 1fr)
+      }
+
+      .card {
+        grid-column: span 6
+      }
+
+      .row {
+        grid-template-columns: 46px 1.2fr 1.6fr auto
+      }
+
+      .nav-container {
+        padding: 1rem 1.75rem
+      }
+
+      .wrap {
+        padding: 24px 16px 48px;
+        margin-top: 120px
+      }
+
+      .search {
+        max-width: none
+      }
+    }
+
+    /* ===== Dark theme fixes (姓名/列表/搜索/标签等) ===== */
+    [data-theme="dark"] body {
+      color: var(--pure-white)
+    }
+
+    [data-theme="dark"] .card,
+    [data-theme="dark"] .row,
+    [data-theme="dark"] .toolbar,
+    [data-theme="dark"] .search,
+    [data-theme="dark"] .btn-toggle,
+    [data-theme="dark"] .seg,
+    [data-theme="dark"] .modal-card,
+    [data-theme="dark"] .composer,
+    [data-theme="dark"] .empty {
+      background: var(--card-bg);
+      color: var(--pure-white);
+      border-color: var(--light-grey)
+    }
+
+    [data-theme="dark"] .tag {
+      background: rgba(255, 255, 255, .08);
+      color: var(--pure-white);
+      border-color: var(--light-grey)
+    }
+
+    [data-theme="dark"] .btn-ghost {
+      background: transparent;
+      color: var(--pure-white);
+      border-color: var(--light-grey)
+    }
+
+    [data-theme="dark"] .btn-ghost svg path {
+      stroke: var(--primary-orange)
+    }
+
+    [data-theme="dark"] .hero h1,
+    [data-theme="dark"] .hero p {
+      color: var(--pure-white)
+    }
+
+    [data-theme="dark"] .nm,
+    [data-theme="dark"] .row .nm,
+    [data-theme="dark"] .tags,
+    [data-theme="dark"] .card .nm {
+      color: var(--pure-white)
+    }
+
+    [data-theme="dark"] .row,
+    [data-theme="dark"] .card,
+    [data-theme="dark"] .head {
+      background: var(--card-bg);
+      border-color: var(--light-grey)
+    }
+
+    [data-theme="dark"] .head {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02))
+    }
+
+    [data-theme="dark"] .search {
+      background: #2a2a2a;
+      border-color: #555
+    }
+
+    [data-theme="dark"] .search input {
+      color: var(--pure-white);
+      background: transparent
+    }
+
+    [data-theme="dark"] .search input::placeholder {
+      color: #CFCFCF
+    }
+
+    [data-theme="dark"] .search svg path {
+      stroke: #CFCFCF
+    }
+
+    [data-theme="dark"] .seg,
+    [data-theme="dark"] .btn-toggle {
+      background: var(--card-bg);
+      border-color: var(--light-grey);
+      color: var(--pure-white)
+    }
+
+    [data-theme="dark"] .seg button {
+      background: transparent;
+      color: var(--pure-white)
+    }
+
+    [data-theme="dark"] .ava {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #ffd9cc
+    }
+
+    [data-theme="dark"] .badge {
+      background: rgba(27, 94, 32, .25);
+      color: #BDEDCB;
+      border-color: rgba(189, 237, 203, .35)
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== Glass Navbar ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo-link">
+        <img src="Assets\Logo.png" alt="CoLab Logo" class="logo-img">
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="Home_logged.html" class="nav-link">Home</a></li>
+        <li><a href="Lecture.html" class="nav-link">Lecture</a></li>
+        <li><a href="Tut.html" class="nav-link">Tutorial</a></li>
+        <li><a href="https://canvas.sydney.edu.au/" target="_blank" class="nav-link">Canvas</a></li>
+        <li><a href="Teamup.html" class="nav-link active">TeamUp</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <label class="theme-switch" aria-label="Toggle theme">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider">
+            <span class="slider-icon sun">☀️</span>
+            <span class="slider-icon moon">🌙</span>
+          </span>
+        </label>
+
+        <!-- 头像按钮（默认有占位图，可被 localStorage 覆盖） -->
+        <a href="#" class="profile-btn" aria-label="User Profile">
+          <img id="profileImg" src="assets/avatar3.png" alt="Profile" class="profile-btn-img">
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <div class="toolbar" role="region" aria-label="Team Up toolbar">
+      <div class="search" role="search" aria-label="Search names">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 21l-4.2-4.2" stroke="#999" stroke-width="2" stroke-linecap="round" />
+          <circle cx="11" cy="11" r="7" stroke="#999" stroke-width="2" fill="none" />
+        </svg>
+        <input id="search" type="search" placeholder="Search names...">
+      </div>
+
+      <div class="seg" role="tablist" aria-label="layout">
+        <button id="btnCard" class="active" role="tab" aria-selected="true" aria-controls="view-card">Card</button>
+        <button id="btnList" role="tab" aria-selected="false" aria-controls="view-list">List</button>
+      </div>
+
+      <button id="btnSaved" class="btn-toggle" title="Show saved">Saved</button>
+      <button id="btnTeam" class="btn-toggle" title="Show my team">My team</button>
+    </div>
+
+    <section class="hero" aria-live="polite">
+      <h1>Let's team up!</h1>
+      <p>Find the right people to work with.</p>
+    </section>
+
+    <section id="view-card" class="grid" aria-label="Card results"></section>
+    <section id="view-list" class="list" aria-label="List results"></section>
+  </main>
+
+  <!-- Profile Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card" role="document">
+      <div class="modal-h" id="modalTitle">Profile</div>
+      <div class="modal-b" id="modalBody"></div>
+      <div class="modal-f"><button class="btn-ghost" id="modalClose">Close</button></div>
+    </div>
+  </div>
+
+  <!-- Chat Modal -->
+  <div id="chatModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card chat-card" role="document">
+      <div class="modal-h"><span id="chatWith">Chat</span></div>
+      <div class="modal-b chat-body">
+        <div id="msgs" class="msgs" aria-live="polite"></div>
+        <div class="composer">
+          <input id="msgInput" type="text" placeholder="Type a message…" />
+          <button class="send" id="sendBtn">Send</button>
+          <button class="teamup" id="teamUpBtn">Team Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ============ Theme persist ============ */
+    const themeToggleSwitch = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    htmlEl.setAttribute('data-theme', currentTheme);
+    themeToggleSwitch.checked = currentTheme === 'dark';
+    themeToggleSwitch.addEventListener('change', () => {
+      const newTheme = themeToggleSwitch.checked ? 'dark' : 'light';
+      htmlEl.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    /* ============ Navbar scroll shadow ============ */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 50) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
+    });
+
+    /* ============ Active nav link highlight ============ */
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (!link.hasAttribute('target')) {
+          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+
+    /* ============ Avatar restore ============ */
+    (function restoreAvatar() {
+      const raw = localStorage.getItem('avatarSelection');
+      if (!raw) return;
+      try {
+        const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
+        if (avatarSrc) {
+          const img = document.getElementById('profileImg');
+          if (img) img.src = avatarSrc;
+        }
+        const bg = bgStyle || bgColor;
+        if (bg) {
+          const btn = document.querySelector('.profile-btn');
+          if (btn) btn.style.background = bg;
+        }
+      } catch (e) { console.warn('Failed to parse avatarSelection', e); }
+    })();
+
+    /* ============ Profile dropdown with entrance animation ============ */
+    const profileBtn = document.querySelector('.profile-btn');
+    let profileDropdown = null;
+
+    function createProfileDropdown() {
+      let avatarSrcFromStore = document.getElementById('profileImg')?.src || 'assets/avatar3.png';
+      let avatarBgFromStore = '';
+      try {
+        const raw = localStorage.getItem('avatarSelection');
+        if (raw) {
+          const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
+          if (avatarSrc) avatarSrcFromStore = avatarSrc;
+          const bg = bgStyle || bgColor;
+          if (bg) avatarBgFromStore = bg;
+        }
+      } catch (e) { }
+
+      const dropdown = document.createElement('div');
+      dropdown.className = 'profile-dropdown';
+      dropdown.innerHTML = `
+        <div class="profile-header">
+          <div class="profile-avatar" ${avatarBgFromStore ? `style="background:${avatarBgFromStore};"` : ''}>
+            <img src="${avatarSrcFromStore}" alt="User Avatar" class="profile-avatar-img">
+          </div>
+          <div class="profile-info">
+            <h3 class="profile-name">Aiden Y</h3>
+            <p class="profile-email">aiden.y@sydney.edu.au</p>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat-item"><span class="stat-value">42</span><span class="stat-label">Courses</span></div>
+          <div class="stat-item"><span class="stat-value">98%</span><span class="stat-label">Progress</span></div>
+          <div class="stat-item"><span class="stat-value">A+</span><span class="stat-label">Grade</span></div>
+        </div>
+        <div class="profile-menu">
+          <a href="#" class="profile-menu-item">👤 <span>View Profile</span></a>
+          <a href="#" class="profile-menu-item">⚙️ <span>Settings</span></a>
+          <a href="#" class="profile-menu-item">📚 <span>My Courses</span></a>
+          <a href="#" class="profile-menu-item">🏆 <span>Achievements</span></a>
+          <div class="profile-divider"></div>
+          <a href="#" class="profile-menu-item logout">🚪 <span>Sign Out</span></a>
+        </div>
+      `;
+      document.body.appendChild(dropdown);
+      return dropdown;
+    }
+    function positionDropdown() {
+      if (!profileDropdown) return;
+      const rect = profileBtn.getBoundingClientRect();
+      profileDropdown.style.top = `${rect.bottom + 10}px`;
+      profileDropdown.style.right = `${window.innerWidth - rect.right}px`;
+    }
+    profileBtn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (!profileDropdown) {
+        profileDropdown = createProfileDropdown();
+        positionDropdown();
+        requestAnimationFrame(() => profileDropdown.classList.add('show')); // 入场
+      } else {
+        if (profileDropdown.classList.contains('show')) {
+          profileDropdown.classList.remove('show');
+          setTimeout(() => { profileDropdown.remove(); profileDropdown = null; }, 280);
+        } else {
+          positionDropdown();
+          requestAnimationFrame(() => profileDropdown.classList.add('show'));
+        }
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (profileDropdown && !profileDropdown.contains(e.target) && e.target !== profileBtn) {
+        profileDropdown.classList.remove('show');
+        setTimeout(() => { profileDropdown.remove(); profileDropdown = null; }, 280);
+      }
+    });
+    window.addEventListener('resize', positionDropdown);
+
+    /* ===================== TeamUp logic ===================== */
+    try { localStorage.removeItem('favourites'); localStorage.removeItem('teammates'); } catch (e) { }
+
+    const TAG_POOL = ["Calm", "Detail-oriented", "Empathetic", "Open-Minded", "Passionate", "Reflective", "Communication", "Concepts", "Prototyping", "Research", "Technical", "Visualization", "Critic", "Facilitator", "Implementer", "Innovator", "Leader", "Strategist"];
+    function sampleTags(k) { const p = [...TAG_POOL]; for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[p[i], p[j]] = [p[j], p[i]] } return p.slice(0, k) }
+
+    const people = [
+      { id: 'u1', name: 'Lilaid Yang', initial: 'A', photo: 'Assets/head1.png', desc: 'Mixed-methods researcher. Diary study enjoyer.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u2', name: 'Fan Wu', initial: 'B', photo: 'Assets/head2.png', desc: 'Design systems & prototyping.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u3', name: 'Robin Wang', initial: 'C', photo: 'Assets/head3.png', desc: 'Frontend dev. Accessibility advocate.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u4', name: 'Beatrice Park', initial: 'D', photo: 'Assets/head4.png', desc: 'Motion & micro-interactions.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u5', name: 'Soysauce Shuai', initial: 'E', photo: 'Assets/head5.png', desc: 'Service design & facilitation.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u6', name: 'Jiawei Liu', initial: 'F', photo: 'Assets/head6.png', desc: 'Data viz & product thinking.', portfolio: '', tags: sampleTags(5) }
+    ];
+
+    const state = { favourites: [], teammates: [], view: 'card', filter: 'all' };
+    const viewCardEl = document.getElementById('view-card');
+    const viewListEl = document.getElementById('view-list');
+    const btnCard = document.getElementById('btnCard');
+    const btnList = document.getElementById('btnList');
+    const btnSaved = document.getElementById('btnSaved');
+    const btnTeam = document.getElementById('btnTeam');
+
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    const chatModal = document.getElementById('chatModal');
+    const chatWithEl = document.getElementById('chatWith');
+    const msgsEl = document.getElementById('msgs');
+    const msgInput = document.getElementById('msgInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const teamUpBtn = document.getElementById('teamUpBtn');
+
+    const isFav = id => state.favourites.includes(id);
+    const isTeam = id => state.teammates.includes(id);
+    function toggleFav(id) { const i = state.favourites.indexOf(id); if (i === -1) state.favourites.push(id); else state.favourites.splice(i, 1); render(); }
+    function addTeammate(id) { if (!state.teammates.includes(id)) state.teammates.push(id); }
+
+    function updateTeamUpButton(uid) {
+      if (isTeam(uid)) {
+        teamUpBtn.textContent = 'Already teammates';
+        teamUpBtn.disabled = true;
+        teamUpBtn.style.background = '#CFCFCF';
+        teamUpBtn.style.cursor = 'not-allowed';
+      } else {
+        teamUpBtn.textContent = 'Team Up';
+        teamUpBtn.disabled = false;
+        teamUpBtn.style.background = 'linear-gradient(135deg,var(--primary-orange),var(--orange-light))';
+        teamUpBtn.style.cursor = 'pointer';
+      }
+    }
+
+    function nameWithBadge(p) { return `${p.name}${isTeam(p.id) ? ` <span class="badge">✔ Teammate</span>` : ''}` }
+
+    function personCard(p) {
+      const fav = isFav(p.id);
+      const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      return `
+      <article class="card" data-id="${p.id}" role="button" tabindex="0" aria-label="${p.name}">
+        <div class="head">
+          <div class="ava">${p.photo ? `<img src="${p.photo}" alt="${p.name}'s avatar" class="ava-img">` : p.initial}</div>
+          <div class="nm">${nameWithBadge(p)}</div>
+        </div>
+        <div class="tags">${tags}</div>
+        <div class="foot" data-stop>
+          <button class="btn-ghost" data-fav="${p.id}" aria-pressed="${fav}" title="Save">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 17.3l-5.5 3 1-6.1L3 9.7l6.2-.9L12 3l2.8 5.8 6.2.9-4.5 4.5 1 6.1z" fill="${fav ? '#F26B38' : 'none'}" stroke="#F26B38" stroke-width="1.5"/>
+            </svg> Save
+          </button>
+          <button class="btn-pri" data-connect="${p.id}">Connect</button>
+        </div>
+      </article>`;
+    }
+
+    function personRow(p) {
+      const fav = isFav(p.id);
+      const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      return `
+      <div class="row" data-id="${p.id}" role="button" tabindex="0" aria-label="${p.name}">
+        <div class="ava">${p.photo ? `<img src="${p.photo}" alt="${p.name}'s avatar" class="ava-img">` : p.initial}</div>
+        <div class="nm">${nameWithBadge(p)}</div>
+        <div class="tags">${tags}</div>
+        <div class="foot" data-stop>
+          <button class="btn-ghost" data-fav="${p.id}" aria-pressed="${fav}" title="Save">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 17.3l-5.5 3 1-6.1L3 9.7l6.2-.9L12 3l2.8 5.8 6.2.9-4.5 4.5 1 6.1z" fill="${fav ? '#F26B38' : 'none'}" stroke="#F26B38" stroke-width="1.5"/>
+            </svg>
+          </button>
+          <button class="btn-pri" data-connect="${p.id}">Connect</button>
+        </div>
+      </div>`;
+    }
+
+    function filtered() {
+      const q = (document.getElementById('search').value || '').trim().toLowerCase();
+      let items = people;
+      if (q) items = items.filter(p => p.name.toLowerCase().includes(q));
+      if (state.filter === 'saved') items = items.filter(p => isFav(p.id));
+      if (state.filter === 'team') items = items.filter(p => isTeam(p.id));
+      return items.slice(0, 6);
+    }
+
+    function render() {
+      const items = filtered();
+      let emptyHTML = `<div class="empty"><h3>No results here yet.</h3><div>Try clearing your search.</div></div>`;
+      if (state.filter === 'saved') emptyHTML = `<div class="empty"><h3>No saved classmates yet.</h3><div>Use “Save” on a card to add here.</div><button class="btn-ghost" data-clear-filter>Back to All</button></div>`;
+      if (state.filter === 'team') emptyHTML = `<div class="empty"><h3>No teammates yet.</h3><div>Use “Team Up” in chat to add here.</div><button class="btn-ghost" data-clear-filter>Back to All</button></div>`;
+
+      if (state.view === 'card') {
+        viewCardEl.style.display = 'grid'; viewListEl.style.display = 'none';
+        viewCardEl.innerHTML = items.length ? items.map(personCard).join('') : emptyHTML;
+      } else {
+        viewCardEl.style.display = 'none'; viewListEl.style.display = 'block';
+        viewListEl.innerHTML = items.length ? items.map(personRow).join('') : emptyHTML;
+      }
+      btnSaved.classList.toggle('active', state.filter === 'saved');
+      btnTeam.classList.toggle('active', state.filter === 'team');
+      btnCard.classList.toggle('active', state.view === 'card');
+      btnList.classList.toggle('active', state.view === 'list');
+    }
+
+    document.addEventListener('click', e => {
+      const favBtn = e.target.closest('[data-fav]');
+      const connectBtn = e.target.closest('[data-connect]');
+      const clearBtn = e.target.closest('[data-clear-filter]');
+      const stopArea = e.target.closest('[data-stop]');
+      if (clearBtn) { state.filter = 'all'; render(); return; }
+      if (favBtn) { e.preventDefault(); e.stopPropagation(); toggleFav(favBtn.dataset.fav); return; }
+      if (connectBtn) { e.preventDefault(); e.stopPropagation(); const p = people.find(x => x.id === connectBtn.dataset.connect); if (p) openChat(p); return; }
+      const item = e.target.closest('.card,.row');
+      if (item && !stopArea) {
+        const id = item.getAttribute('data-id');
+        const p = people.find(x => x.id === id);
+        if (p) openProfile(p);
+      }
+    });
+    document.getElementById('search').addEventListener('input', render);
+    btnCard.addEventListener('click', () => { state.view = 'card'; render() });
+    btnList.addEventListener('click', () => { state.view = 'list'; render() });
+    btnSaved.addEventListener('click', () => { state.filter = state.filter === 'saved' ? 'all' : 'saved'; render() });
+    btnTeam.addEventListener('click', () => { state.filter = state.filter === 'team' ? 'all' : 'team'; render() });
+
+    // Profile modal
+    function openProfile(person) {
+      document.getElementById('modalTitle').textContent = person.name;
+      document.getElementById('modalBody').innerHTML = `
+        <div class="sec"><strong>Description</strong><br>${person.desc || '—'}</div>
+        <div class="sec"><strong>Portfolio</strong><br>${person.portfolio ? `<a href="${person.portfolio}" target="_blank" rel="noopener">Visit portfolio</a>` : '—'}</div>
+        <div class="sec"><strong>Tags</strong><br>${(person.tags || []).map(t => `<span class="tag">${t}</span>`).join(' ')}</div>
+      `;
+      const m = document.getElementById('modal');
+      m.classList.add('open'); m.setAttribute('aria-hidden', 'false');
+    }
+    document.getElementById('modalClose').addEventListener('click', () => {
+      const m = document.getElementById('modal');
+      m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
+    });
+
+    // Chat modal
+    const chats = {};
+    function renderChat(uid) {
+      const list = chats[uid] || [];
+      document.getElementById('msgs').innerHTML = list.map(m => `<div class="msg ${m.from === 'me' ? 'me' : 'peer'}">${m.text}</div>`).join('');
+      document.getElementById('msgs').scrollTop = document.getElementById('msgs').scrollHeight
+    }
+    function openChat(p) {
+      if (!chats[p.id]) chats[p.id] = [{ from: 'peer', text: `Hey! I'm ${p.name}. Nice to meet you 👋` }];
+      document.getElementById('chatWith').textContent = `Chat with ${p.name}`;
+      document.getElementById('chatModal').dataset.userId = p.id;
+      renderChat(p.id);
+      const cm = document.getElementById('chatModal');
+      cm.classList.add('open'); cm.setAttribute('aria-hidden', 'false');
+      updateTeamUpButton(p.id);
+      setTimeout(() => document.getElementById('msgInput').focus(), 50);
+    }
+    document.getElementById('chatModal').addEventListener('click', e => {
+      if (e.target.id === 'chatModal') {
+        e.currentTarget.classList.remove('open');
+        e.currentTarget.setAttribute('aria-hidden', 'true');
+      }
+    });
+    document.getElementById('sendBtn').addEventListener('click', () => {
+      const uid = document.getElementById('chatModal').dataset.userId;
+      const input = document.getElementById('msgInput');
+      const txt = input.value.trim(); if (!txt) return;
+      (chats[uid] = chats[uid] || []).push({ from: 'me', text: txt });
+      input.value = ''; renderChat(uid);
+    });
+    document.getElementById('msgInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('sendBtn').click(); });
+    document.getElementById('teamUpBtn').addEventListener('click', () => {
+      const uid = document.getElementById('chatModal').dataset.userId;
+      addTeammate(uid);
+      alert('Team up success! 🎉');
+      updateTeamUpButton(uid);
+      render();
+    });
+
+    // First render
+    render();
+  </script>
+</body>
+
+</html>

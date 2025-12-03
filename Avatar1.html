@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Avatar1</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: #FAFAFA;
+            color: #1A1A1A;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans";
+        }
+
+        :root {
+            --primary-orange: #F26B38;
+            --primary-orange-dark: #D95A2A;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --border-color: #E8E8E8;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, .06);
+            --shadow-md: 0 6px 24px rgba(0, 0, 0, .10);
+            --ease: cubic-bezier(.4, 0, .2, 1);
+
+            --page-gap: clamp(16px, 2vw, 32px);
+            --col-max: clamp(560px, 48vw, 680px);
+            --radius-lg: clamp(20px, 3vw, 36px);
+            --radius-md: clamp(12px, 1.6vw, 16px);
+            --fs-h1: clamp(22px, 2.2vw, 32px);
+            --fs-btn: clamp(14px, 1.2vw, 16px);
+
+            /* 新增：统一控制预览框尺寸 */
+            --preview-size: clamp(260px, 34vw, 420px);
+        }
+
+        /* 页面两栏在视口中线垂直对齐（桌面端） */
+        .page {
+            min-height: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, var(--col-max)) minmax(320px, 1fr);
+            gap: var(--page-gap);
+            align-items: center;
+            /* 关键：两栏垂直居中对齐 */
+            padding: env(safe-area-inset-top) clamp(12px, 4vw, 40px) env(safe-area-inset-bottom) clamp(12px, 4vw, 40px);
+        }
+
+        @media (max-width:960px) {
+            .page {
+                grid-template-columns: 1fr;
+                align-items: start;
+                /* 移动端从上开始 */
+            }
+        }
+
+        /* 左侧整体：内容都居中，间距更紧凑 */
+        .avatar-left {
+            display: grid;
+            grid-template-rows: auto auto auto;
+            gap: clamp(10px, 1.4vw, 16px);
+            margin-inline: auto;
+            width: 100%;
+            max-width: unset;
+            justify-items: center;
+            /* 关键：让标题、预览、按钮都水平居中 */
+            align-self: center;
+            /* 与右侧在同一垂直中线 */
+        }
+
+        .avatar-title {
+            font-family: "Merriweather", serif;
+            font-size: var(--fs-h1);
+            font-weight: 900;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        /* 预览框：缩小并正方形 */
+        .avatar-preview {
+            width: var(--preview-size);
+            height: var(--preview-size);
+            aspect-ratio: auto;
+            margin: 0 auto;
+            background: #b8d8ff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease);
+        }
+
+        .avatar-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .bg-arrow {
+            position: absolute;
+            top: 50%;
+            translate: 0 -50%;
+            width: clamp(36px, 4.6vw, 48px);
+            height: clamp(36px, 4.6vw, 48px);
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .65);
+            color: var(--primary-orange);
+            font-size: clamp(18px, 2.2vw, 22px);
+            font-weight: 800;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+            transition: transform .2s var(--ease), background .2s var(--ease), color .2s var(--ease);
+            touch-action: manipulation;
+        }
+
+        .bg-arrow:hover {
+            background: var(--primary-orange);
+            color: #fff;
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .bg-arrow.left {
+            left: clamp(8px, 1vw, 12px);
+        }
+
+        .bg-arrow.right {
+            right: clamp(8px, 1vw, 12px);
+        }
+
+        /* 上传/保存区域与预览靠近并水平居中排列 */
+        .inline-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 关键：水平居中 */
+            gap: clamp(10px, 1.6vw, 16px);
+            flex-wrap: nowrap;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .uploader {
+            flex: 0 0 auto;
+            /* 不再拉伸到很宽 */
+            min-width: clamp(180px, 24vw, 260px);
+            display: grid;
+            place-items: center;
+            border: 2px dashed var(--border-color);
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: clamp(10px, 1.6vw, 14px);
+            gap: 6px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease);
+            cursor: pointer;
+        }
+
+        .uploader:hover {
+            border-color: #cfcfcf;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .uploader.drag {
+            border-color: var(--primary-orange);
+            box-shadow: 0 8px 22px rgba(242, 107, 56, .25);
+        }
+
+        .uploader input {
+            display: none;
+        }
+
+        .uploader .title {
+            font-weight: 800;
+        }
+
+        .uploader .hint {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .save-box {
+            position: relative;
+            overflow: hidden;
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5em;
+            padding: clamp(10px, 1.2vw, 12px) clamp(14px, 1.8vw, 18px);
+            border-radius: var(--radius-md);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: var(--fs-btn);
+            font-family: "Merriweather", serif;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            box-shadow: 0 4px 15px rgba(242, 107, 56, .3);
+            transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+            white-space: nowrap;
+        }
+
+        .save-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3), transparent);
+            transition: left .6s ease;
+        }
+
+        .save-box:hover::before {
+            left: 100%;
+        }
+
+        .save-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(242, 107, 56, .4);
+        }
+
+        /* 右侧列在中线对齐左侧 */
+        .avatar-right {
+            display: flex;
+            flex-direction: column;
+            gap: var(--page-gap);
+            width: 100%;
+            max-width: min(900px, 92vw);
+            margin-inline: auto;
+            align-self: center;
+            /* 关键：与左侧在同一垂直中线 */
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(96px, 18vw, 160px), 1fr));
+            gap: clamp(10px, 1.6vw, 16px);
+        }
+
+        .avatar-cell {
+            aspect-ratio: 1/1;
+            border-radius: clamp(14px, 2vw, 20px);
+            overflow: hidden;
+            background: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+        }
+
+        .avatar-cell:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .avatar-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .avatar-cell.active {
+            outline: 3px solid var(--primary-orange);
+            outline-offset: 3px;
+        }
+
+        /* --- 动画 Keyframes --- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(70px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .anim-fadeUp {
+            opacity: 0;
+            animation: fadeUp .6s ease forwards;
+        }
+
+        .anim-slideInDown {
+            opacity: 0;
+            animation: slideInDown .8s cubic-bezier(.4, 0, .2, 1) forwards;
+        }
+
+        .anim-slideInRight {
+            opacity: 0;
+            animation: slideInRight .9s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: .1s;
+        }
+
+        .delay-2 {
+            animation-delay: .2s;
+        }
+
+        /* 阶梯动画 */
+        .avatar-grid .avatar-cell {
+            opacity: 0;
+            animation: fadeUp .5s ease forwards;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(2) {
+            animation-delay: .1s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(4) {
+            animation-delay: .2s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(6) {
+            animation-delay: .3s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(7) {
+            animation-delay: .35s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(8) {
+            animation-delay: .4s;
+        }
+
+        .avatar-grid .avatar-cell:nth-child(9) {
+            animation-delay: .45s;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <section class="avatar-left">
+            <h1 class="avatar-title anim-slideInDown">Create your avatar :D</h1>
+
+            <div class="avatar-preview anim-fadeUp delay-1" id="preview" aria-label="Avatar preview area">
+                <button class="bg-arrow left" aria-label="Previous background">‹</button>
+                <img id="avatarImg" src="Assets/Avatar8.png" alt="Avatar preview">
+                <button class="bg-arrow right" aria-label="Next background">›</button>
+            </div>
+
+            <div class="inline-actions anim-fadeUp delay-2">
+                <label class="uploader" id="uploader">
+                    <input type="file" id="fileInput" accept="image/*">
+                    <div class="title">Upload an image</div>
+                    <div class="hint">Click or drag & drop (recommended &lt; 2MB)</div>
+                </label>
+
+                <a href="Avatar2.html" class="save-box" id="saveBtn" aria-label="Save avatar">
+                    💾 Save
+                </a>
+            </div>
+        </section>
+
+        <aside class="avatar-right anim-slideInRight delay-2" aria-label="Choose your avatar">
+            <div class="avatar-grid" id="grid">
+                <div class="avatar-cell" data-src="Assets/Avatar1.png"><img src="Assets/Avatar1.png" alt="Avatar 1">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar2.png"><img src="Assets/Avatar2.png" alt="Avatar 2">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar3.png"><img src="Assets/Avatar3.png" alt="Avatar 3">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar4.png"><img src="Assets/Avatar4.png" alt="Avatar 4">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar5.png"><img src="Assets/Avatar5.png" alt="Avatar 5">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar6.png"><img src="Assets/Avatar6.png" alt="Avatar 6">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar7.png"><img src="Assets/Avatar7.png" alt="Avatar 7">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar8.png"><img src="Assets/Avatar8.png" alt="Avatar 8">
+                </div>
+                <div class="avatar-cell" data-src="Assets/Avatar9.png"><img src="Assets/Avatar9.png" alt="Avatar 9">
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // Avatar selection
+        const avatarImg = document.getElementById('avatarImg');
+        const cells = document.querySelectorAll('.avatar-cell');
+        let currentAvatarSrc = avatarImg.getAttribute('src');
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                cells.forEach(c => c.classList.remove('active'));
+                cell.classList.add('active');
+                currentAvatarSrc = cell.dataset.src;
+                avatarImg.src = currentAvatarSrc;
+            }, { passive: true });
+        });
+
+        // Background cycle
+        const preview = document.getElementById('preview');
+        const leftBtn = document.querySelector('.bg-arrow.left');
+        const rightBtn = document.querySelector('.bg-arrow.right');
+        const bgOptions = [
+            '#b8d8ff', '#ffe3b8', '#d6f5d6', '#f5d6f0', '#f0f0f0',
+            'url(Assets/avatar_bg1.png) center/cover no-repeat',
+            'url(Assets/avatar_bg2.png) center/cover no-repeat',
+            'url(Assets/avatar_bg3.png) center/cover no-repeat'
+        ];
+        let bgIndex = 0;
+        const applyBg = (i) => preview.style.background = bgOptions[i];
+        applyBg(bgIndex);
+
+        leftBtn.addEventListener('click', () => {
+            bgIndex = (bgIndex - 1 + bgOptions.length) % bgOptions.length;
+            applyBg(bgIndex);
+        }, { passive: true });
+        rightBtn.addEventListener('click', () => {
+            bgIndex = (bgIndex + 1) % bgOptions.length;
+            applyBg(bgIndex);
+        }, { passive: true });
+
+        // Upload
+        const uploader = document.getElementById('uploader');
+        const fileInput = document.getElementById('fileInput');
+
+        uploader.addEventListener('click', (e) => {
+            if (e.target === fileInput) return;
+            fileInput.click();
+        });
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                currentAvatarSrc = ev.target.result;
+                avatarImg.src = currentAvatarSrc;
+                cells.forEach(c => c.classList.remove('active'));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            const f = (e.target.files && e.target.files[0]) || null;
+            handleFile(f);
+            fileInput.value = '';
+        });
+
+        // Save
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const bgCss = bgOptions[bgIndex];
+            const selection = {
+                avatarSrc: currentAvatarSrc,
+                bgStyle: bgCss,
+                bgColor: bgCss,
+                ts: Date.now()
+            };
+            localStorage.setItem('avatarSelection', JSON.stringify(selection));
+        });
+    </script>
+</body>
+
+</html>

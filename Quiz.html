@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography Workshop Quiz — University of Sydney</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --usyd-orange: #E64626;
+            --usyd-orange-dark: #C23616;
+            --usyd-orange-light: #FF6B4A;
+            --usyd-gold: #FFB81C;
+            --bg-main: #FAFBFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1D29;
+            --text-secondary: #4E5D78;
+            --text-muted: #8B95A8;
+            --border-color: #E5E8ED;
+            --success-color: #10B981;
+            --error-color: #EF4444;
+            --shadow-elegant: 0 10px 40px rgba(230, 70, 38, 0.08);
+            --shadow-float: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #FAFBFC 0%, #F5F7FA 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 背景装饰元素 */
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.03;
+        }
+
+        .bg-circle-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--usyd-orange);
+            top: -300px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-circle-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--usyd-gold);
+            bottom: -150px;
+            left: -150px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        /* 页眉 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .quiz-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            flex: 1;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .progress-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(230, 70, 38, 0.3);
+            position: relative;
+        }
+
+        .progress-ring {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border: 3px solid transparent;
+            border-top-color: var(--usyd-orange-light);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-bar-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: 1rem auto 0;
+            padding: 0 3rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--usyd-orange), var(--usyd-orange-light), var(--usyd-gold));
+            background-size: 200% 100%;
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: shimmer 2s linear infinite;
+            box-shadow: 0 0 20px rgba(230, 70, 38, 0.4);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* 主容器 */
+        .quiz-container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .quiz-intro h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .quiz-intro p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .quiz-section {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-elegant);
+            border: 1px solid var(--border-color);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--usyd-orange), var(--usyd-gold));
+        }
+
+        .question-block {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .question-block:nth-child(1) { animation-delay: 0.5s; }
+        .question-block:nth-child(2) { animation-delay: 0.6s; }
+        .question-block:nth-child(3) { animation-delay: 0.7s; }
+        .question-block:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .question-number {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(230, 70, 38, 0.25);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .question-block:hover .question-number {
+            transform: scale(1.05) rotate(-5deg);
+            box-shadow: 0 8px 24px rgba(230, 70, 38, 0.35);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+            letter-spacing: -0.3px;
+            flex: 1;
+        }
+
+        .options-list {
+            display: grid;
+            gap: 1rem;
+            margin-left: 0;
+        }
+
+        .option-item {
+            border: 2px solid var(--border-color);
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, var(--usyd-orange), var(--usyd-gold));
+            transform: scaleY(0);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .option-item:hover {
+            border-color: var(--usyd-orange);
+            background: rgba(230, 70, 38, 0.03);
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(230, 70, 38, 0.12);
+        }
+
+        .option-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .option-item.selected {
+            border-color: var(--usyd-orange);
+            background: linear-gradient(135deg, rgba(230, 70, 38, 0.08), rgba(255, 184, 28, 0.08));
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(230, 70, 38, 0.15);
+        }
+
+        .option-item.selected::before {
+            transform: scaleY(1);
+        }
+
+        .option-item.correct {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.12));
+            animation: successPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .option-item.incorrect {
+            border-color: var(--error-color);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(239, 68, 68, 0.12));
+            animation: errorShake 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .option-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+            background: white;
+        }
+
+        .option-item:hover .option-checkbox {
+            border-color: var(--usyd-orange);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .option-item.selected .option-checkbox {
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            border-color: var(--usyd-orange);
+            transform: scale(1.1) rotate(360deg);
+        }
+
+        .option-item.correct .option-checkbox {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .option-item.incorrect .option-checkbox {
+            background: var(--error-color);
+            border-color: var(--error-color);
+        }
+
+        .option-checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .option-item.selected .option-checkbox::after,
+        .option-item.correct .option-checkbox::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .option-item.incorrect .option-checkbox::after {
+            content: '✗';
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .option-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .option-item.selected .option-text {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* 提交区域 */
+        .submit-section {
+            margin-top: 3rem;
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            color: white;
+            border: none;
+            padding: 1.25rem 4rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 32px rgba(230, 70, 38, 0.3);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(230, 70, 38, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.5;
+        }
+
+        .submit-note {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* 结果页面 */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+            animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .results-hero {
+            text-align: center;
+            padding: 4rem 3rem;
+            background: linear-gradient(135deg, rgba(230, 70, 38, 0.05), rgba(255, 184, 28, 0.05));
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(230, 70, 38, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .score-display {
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 20px 60px rgba(230, 70, 38, 0.4);
+            position: relative;
+            animation: scaleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s both;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--usyd-orange-light), var(--usyd-gold));
+            z-index: -1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        .score-number {
+            font-size: 4.5rem;
+            font-weight: 900;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .result-message {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+        }
+
+        .result-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1s both;
+        }
+
+        .action-button {
+            padding: 1rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, var(--usyd-orange), var(--usyd-orange-dark));
+            color: white;
+            box-shadow: 0 8px 32px rgba(230, 70, 38, 0.3);
+        }
+
+        .action-button.primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(230, 70, 38, 0.4);
+        }
+
+        .action-button.secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .action-button.secondary:hover {
+            border-color: var(--usyd-orange);
+            background: rgba(230, 70, 38, 0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 反馈区域 */
+        .feedback-section {
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both;
+        }
+
+        .feedback-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .feedback-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--border-color);
+            box-shadow: var(--shadow-elegant);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .feedback-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-float);
+        }
+
+        .feedback-item.correct {
+            border-left-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.03), white);
+        }
+
+        .feedback-item.incorrect {
+            border-left-color: var(--error-color);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.03), white);
+        }
+
+        .feedback-question {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feedback-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .feedback-item.correct .feedback-icon {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .feedback-item.incorrect .feedback-icon {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .feedback-answer {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-left: 2rem;
+        }
+
+        .feedback-answer strong {
+            color: var(--usyd-orange);
+            font-weight: 600;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .quiz-title {
+                font-size: 1.3rem;
+            }
+
+            .progress-indicator {
+                justify-content: center;
+            }
+
+            .quiz-container {
+                padding: 1.5rem;
+                margin: 2rem auto;
+            }
+
+            .quiz-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .quiz-intro h2 {
+                font-size: 2rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .options-list {
+                gap: 0.75rem;
+            }
+
+            .option-item {
+                padding: 1rem;
+            }
+
+            .score-circle {
+                width: 160px;
+                height: 160px;
+            }
+
+            .score-number {
+                font-size: 3.5rem;
+            }
+
+            .result-message {
+                font-size: 2rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+
+            .feedback-answer {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="bg-decoration">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+    </div>
+
+    <!-- 页眉 -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="quiz-title">Typography Workshop Quiz</h1>
+            <div class="progress-indicator">
+                <div class="progress-circle">
+                    <div class="progress-ring"></div>
+                    <span><span id="currentQuestion">0</span>/<span id="totalQuestions">4</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 测验内容 -->
+    <div class="quiz-container">
+        <!-- 介绍 -->
+        <div class="quiz-intro">
+            <h2>Typography Fundamentals</h2>
+            <p>Test your understanding of core typography principles and design concepts.</p>
+        </div>
+
+        <!-- 问题区域 -->
+        <div class="quiz-section" id="quizSection">
+            <!-- 问题 1 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <h2 class="question-text">What is the primary purpose of kerning in typography?</h2>
+                </div>
+                <div class="options-list">
+                    <div class="option-item" data-question="1" data-answer="a">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">To adjust spacing between individual letter pairs</span>
+                    </div>
+                    <div class="option-item" data-question="1" data-answer="b">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">To change the font size uniformly</span>
+                    </div>
+                    <div class="option-item" data-question="1" data-answer="c">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">To add decorative elements to text</span>
+                    </div>
+                    <div class="option-item" data-question="1" data-answer="d">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">To align text to a baseline grid</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题 2 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <h2 class="question-text">Which principle describes how empty space around elements improves design?</h2>
+                </div>
+                <div class="options-list">
+                    <div class="option-item" data-question="2" data-answer="a">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Visual Rhythm</span>
+                    </div>
+                    <div class="option-item" data-question="2" data-answer="b">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Negative Space</span>
+                    </div>
+                    <div class="option-item" data-question="2" data-answer="c">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Color Theory</span>
+                    </div>
+                    <div class="option-item" data-question="2" data-answer="d">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Symmetry</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题 3 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <h2 class="question-text">What does visual hierarchy help achieve in design?</h2>
+                </div>
+                <div class="options-list">
+                    <div class="option-item" data-question="3" data-answer="a">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Making all elements equal in importance</span>
+                    </div>
+                    <div class="option-item" data-question="3" data-answer="b">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Guiding viewers through content by order of importance</span>
+                    </div>
+                    <div class="option-item" data-question="3" data-answer="c">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Adding more colors to the design</span>
+                    </div>
+                    <div class="option-item" data-question="3" data-answer="d">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Reducing the amount of text</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题 4 -->
+            <div class="question-block">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <h2 class="question-text">A baseline grid is primarily used to:</h2>
+                </div>
+                <div class="options-list">
+                    <div class="option-item" data-question="4" data-answer="a">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Create vertical rhythm and consistent spacing</span>
+                    </div>
+                    <div class="option-item" data-question="4" data-answer="b">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Draw horizontal lines across the page</span>
+                    </div>
+                    <div class="option-item" data-question="4" data-answer="c">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Change font styles automatically</span>
+                    </div>
+                    <div class="option-item" data-question="4" data-answer="d">
+                        <div class="option-checkbox"></div>
+                        <span class="option-text">Add borders around text blocks</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="submit-section">
+                <button class="submit-button" id="submitButton" onclick="submitQuiz()">
+                    Submit Assessment
+                </button>
+                <p class="submit-note">Attendance will be marked with ≥60% accuracy</p>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-hero">
+                <div class="score-display">
+                    <div class="score-circle">
+                        <div class="score-number" id="scoreNumber">0</div>
+                        <div class="score-label">out of 4</div>
+                    </div>
+                </div>
+
+                <h2 class="result-message" id="resultMessage">Excellent Work!</h2>
+                <p class="result-description" id="resultDescription">
+                    You've demonstrated a strong understanding of typography principles.
+                </p>
+
+                <div class="results-actions">
+                    <button class="action-button primary" onclick="goBackToLecture()">
+                        Return to Course
+                    </button>
+                    <button class="action-button secondary" onclick="retakeQuiz()">
+                        Retake Assessment
+                    </button>
+                </div>
+            </div>
+
+            <!-- 详细反馈 -->
+            <div class="feedback-section">
+                <h3 class="feedback-title">Answer Review & Explanations</h3>
+                <div id="feedbackList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            1: 'a',
+            2: 'b',
+            3: 'b',
+            4: 'a'
+        };
+
+        const questionExplanations = {
+            1: {
+                question: "What is the primary purpose of kerning in typography?",
+                correct: "To adjust spacing between individual letter pairs",
+                explanation: "Kerning fine-tunes the space between specific letter pairs to improve visual harmony and readability."
+            },
+            2: {
+                question: "Which principle describes how empty space around elements improves design?",
+                correct: "Negative Space",
+                explanation: "Negative space (white space) is crucial for creating balance, improving readability, and directing attention."
+            },
+            3: {
+                question: "What does visual hierarchy help achieve in design?",
+                correct: "Guiding viewers through content by order of importance",
+                explanation: "Visual hierarchy uses size, color, contrast, and placement to show the relative importance of elements."
+            },
+            4: {
+                question: "A baseline grid is primarily used to:",
+                correct: "Create vertical rhythm and consistent spacing",
+                explanation: "Baseline grids ensure consistent vertical spacing and rhythm throughout a design composition."
+            }
+        };
+
+        let userAnswers = {};
+        const totalQuestions = 4;
+
+        document.getElementById('totalQuestions').textContent = totalQuestions;
+        updateProgress();
+
+        // 选项选择
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.style.pointerEvents === 'none') return;
+                
+                const question = this.dataset.question;
+                const answer = this.dataset.answer;
+
+                document.querySelectorAll(`[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                this.classList.add('selected');
+                userAnswers[question] = answer;
+
+                updateProgress();
+            });
+        });
+
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            document.getElementById('currentQuestion').textContent = answered;
+            
+            const progressPercent = (answered / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = answered < totalQuestions;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+
+            for (let q = 1; q <= totalQuestions; q++) {
+                const userAnswer = userAnswers[q];
+                const correctAnswer = correctAnswers[q];
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+
+                setTimeout(() => {
+                    document.querySelectorAll(`[data-question="${q}"]`).forEach(opt => {
+                        const answer = opt.dataset.answer;
+                        
+                        if (answer === correctAnswer) {
+                            opt.classList.add('correct');
+                        } else if (answer === userAnswer && answer !== correctAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                        
+                        opt.style.pointerEvents = 'none';
+                    });
+                }, q * 200);
+            }
+
+            const percentage = (score / totalQuestions) * 100;
+
+            setTimeout(() => {
+                document.getElementById('quizSection').style.display = 'none';
+                document.getElementById('resultsSection').classList.add('show');
+                
+                animateScore(score);
+                setResultMessage(score, percentage);
+                generateFeedback();
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1500);
+        }
+
+        function animateScore(finalScore) {
+            const scoreElement = document.getElementById('scoreNumber');
+            let current = 0;
+            const duration = 1500;
+            const steps = 30;
+            const increment = finalScore / steps;
+            const stepTime = duration / steps;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= finalScore) {
+                    scoreElement.textContent = finalScore;
+                    clearInterval(timer);
+                } else {
+                    scoreElement.textContent = Math.floor(current);
+                }
+            }, stepTime);
+        }
+
+        function setResultMessage(score, percentage) {
+            const messageEl = document.getElementById('resultMessage');
+            const descEl = document.getElementById('resultDescription');
+
+            if (percentage >= 90) {
+                messageEl.textContent = '🎉 Outstanding Performance!';
+                descEl.textContent = 'You have mastered the typography principles covered in this workshop. Your attention to detail is exceptional and demonstrates deep understanding of the fundamentals.';
+            } else if (percentage >= 75) {
+                messageEl.textContent = '✨ Excellent Work!';
+                descEl.textContent = 'You demonstrated a strong understanding of typography fundamentals. Your responses show solid grasp of key concepts. Keep up the great work!';
+            } else if (percentage >= 60) {
+                messageEl.textContent = '👍 Good Job!';
+                descEl.textContent = 'You have a solid grasp of the basics with room to grow. Review the feedback below to strengthen your understanding of typography principles.';
+            } else {
+                messageEl.textContent = '📚 Keep Learning!';
+                descEl.textContent = 'Consider reviewing the lecture materials and retaking the assessment. Every designer starts somewhere, and persistence leads to mastery!';
+            }
+        }
+
+        function generateFeedback() {
+            const feedbackList = document.getElementById('feedbackList');
+            feedbackList.innerHTML = '';
+
+            for (let q = 1; q <= totalQuestions; q++) {
+                const userAnswer = userAnswers[q];
+                const correctAnswer = correctAnswers[q];
+                const isCorrect = userAnswer === correctAnswer;
+                const data = questionExplanations[q];
+
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = `feedback-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackItem.style.animationDelay = `${q * 0.1}s`;
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">
+                        <div class="feedback-icon">${isCorrect ? '✓' : '✗'}</div>
+                        <div>
+                            <strong>Question ${q}:</strong> ${data.question}
+                        </div>
+                    </div>
+                    <div class="feedback-answer">
+                        <strong>Correct Answer:</strong> ${data.correct}<br><br>
+                        <em>${data.explanation}</em>
+                    </div>
+                `;
+
+                feedbackList.appendChild(feedbackItem);
+            }
+        }
+
+        function retakeQuiz() {
+            userAnswers = {};
+            
+            document.querySelectorAll('.option-item').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+                opt.style.pointerEvents = 'auto';
+            });
+
+            document.getElementById('resultsSection').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('quizSection').style.display = 'block';
+            }, 300);
+            document.getElementById('submitButton').disabled = true;
+            
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // lecture.html的功能
+        function goBackToLecture() {
+            window.location.href = 'Lecture.html';
+        }
+
+        console.log('✨ Typography Workshop Quiz loaded');
+        console.log('🎓 DesignLive Platform');
+    </script>
+</body>
+</html>

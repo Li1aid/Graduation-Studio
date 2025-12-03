@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography Composition Workshop — Live Tutorial</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ============================================
+           CSS VARIABLES & THEME SYSTEM
+        ============================================ */
+        :root {
+            --primary-orange: #F26B38;
+            --primary-orange-dark: #D95A2A;
+            --primary-orange-light: #FF8A5B;
+            --bg-main: #FAFAFA;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #4A4A4A;
+            --text-muted: #8A8A8A;
+            --border-color: #E8E8E8;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0A0A0A;
+            --bg-secondary: #141414;
+            --bg-card: #1A1A1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8B8B8;
+            --text-muted: #6A6A6A;
+            --border-color: #2A2A2A;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.6);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.7);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.8);
+            --glass-bg: rgba(26, 26, 26, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+
+        /* ============================================
+           RESET & BASE STYLES
+        ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* ============================================
+           HEADER / NAVIGATION - UPDATED TO MATCH LECTURE
+        ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header.scrolled {
+            background: var(--glass-bg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img {
+            height: 90px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-orange);
+        }
+
+        .nav-link.active {
+            color: var(--primary-orange);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-orange-light));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 20px rgba(242, 107, 56, 0.3);
+            animation: livePulse 3s ease-in-out infinite;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: dotBlink 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Theme Toggle Switch Styles */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 32px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 34px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6px;
+        }
+
+        .slider-icon {
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .slider-icon.sun {
+            opacity: 1;
+        }
+
+        .slider-icon.moon {
+            opacity: 0.3;
+        }
+
+        .theme-switch input:checked ~ .slider {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .theme-switch input:checked ~ .slider .sun {
+            opacity: 0.3;
+        }
+
+        .theme-switch input:checked ~ .slider .moon {
+            opacity: 1;
+        }
+
+        .slider::before {
+            content: '';
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 2px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-switch input:checked ~ .slider::before {
+            transform: translateX(28px);
+        }
+
+        /* Profile Button */
+        .profile-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-secondary);
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-btn-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: fixed;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            z-index: 10001;
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+            overflow: hidden;
+        }
+        
+        .profile-dropdown.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            visibility: visible;
+        }
+        
+        .profile-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 25px;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-right: none;
+            border-bottom: none;
+            transform: rotate(45deg);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(242, 107, 56, 0.1), rgba(242, 107, 56, 0.05));
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--bg-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
+            animation: float 3s ease-in-out infinite;
+            overflow: hidden;
+            border: 2px solid var(--primary-orange);
+        }
+        
+        .profile-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-email {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 1.5rem;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 0.5rem;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .stat-item:last-child {
+            border-right: none;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 0.25rem;
+            animation: countUp 1s ease-out;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .profile-menu {
+            padding: 0.5rem;
+        }
+        
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(242, 107, 56, 0.1));
+            transition: width 0.3s ease;
+        }
+        
+        .profile-menu-item:hover {
+            background: var(--bg-main);
+            color: var(--primary-orange);
+            transform: translateX(5px);
+        }
+        
+        .profile-menu-item:hover::before {
+            width: 100%;
+        }
+        
+        .profile-menu-item.logout {
+            color: #e74c3c;
+        }
+        
+        .profile-menu-item.logout:hover {
+            background: rgba(231, 76, 60, 0.1);
+            color: #c0392b;
+        }
+        
+        .profile-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+        
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================
+           MAIN LAYOUT - TWO COLUMN
+        ============================================ */
+        .main-container {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 2.5rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 2.5rem;
+        }
+
+        /* ============================================
+           LEFT SECTION - VIDEO & AI CHAT
+        ============================================ */
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* VIDEO PLAYER 16:9 */
+        .video-container {
+            background: var(--bg-card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInScale 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .video-container:hover {
+            box-shadow: var(--shadow-xl), 0 0 60px rgba(242, 107, 56, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .video-header {
+            padding: 1.5rem 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .video-frame {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%);
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .video-frame {
+            background: linear-gradient(135deg, #1A1A1A 0%, #0F0F0F 100%);
+        }
+
+        .video-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .whiteboard-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 2.5rem;
+            line-height: 1.2;
+            animation: slideInDown 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .design-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Enhanced Design Terms with Tooltips */
+        .design-term {
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            isolation: isolate;
+        }
+
+        /* Individual shine effect for each button */
+        .design-term::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 45%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.4) 55%,
+                transparent 100%
+            );
+            transform: skewX(-25deg);
+            transition: none;
+            opacity: 0;
+        }
+
+        /* Trigger shine animation on hover for each button independently */
+        .design-term:hover::before {
+            animation: shineEffect 0.6s ease-out;
+        }
+
+        .design-term:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(242, 107, 56, 0.5);
+        }
+
+        .design-term:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Shine animation keyframe */
+        @keyframes shineEffect {
+            0% {
+                left: -150%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                left: 150%;
+                opacity: 0;
+            }
+        }
+
+        /* Floating Tooltip - Fixed and Compact */
+        .design-term-tooltip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 180px;
+            max-width: 200px;
+            padding: 0.5rem 0.6rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 99999;
+            visibility: hidden;
+        }
+
+        .design-term-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tooltip-title {
+            font-weight: 700;
+            color: var(--primary-orange);
+            font-size: 0.75rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .tooltip-translation {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .tooltip-description {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .tooltip-source {
+            margin-top: 0.3rem;
+            padding-top: 0.3rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .key-points {
+            color: var(--text-secondary);
+            line-height: 2;
+            font-size: 1.05rem;
+        }
+
+        .key-points strong {
+            color: var(--text-primary);
+        }
+
+        /* DRAWING CANVAS OVERLAY */
+        #drawingCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            pointer-events: none;
+        }
+
+        #drawingCanvas.active {
+            pointer-events: all;
+        }
+
+        /* VIDEO CONTROLS */
+        .video-controls {
+            padding: 1.5rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.3rem;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-orange);
+            color: white;
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-btn.active {
+            background: var(--primary-orange);
+            color: white;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 20px rgba(242, 107, 56, 0.4);
+        }
+
+        /* COLOR PICKER */
+        .color-picker-wrapper {
+            position: relative;
+        }
+
+        .color-palette {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .color-palette.show {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-option.selected {
+            border-color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        /* BRUSH SIZE INDICATOR */
+        .brush-indicator {
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* AI CHAT SECTION */
+        .ai-chat-section {
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: fadeInScale 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+        }
+
+        .ai-chat-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ai-chat-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .ai-icon {
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .ai-messages {
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .ai-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ai-messages::-webkit-scrollbar-track {
+            background: var(--bg-main);
+            border-radius: 10px;
+        }
+
+        .ai-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-orange);
+            border-radius: 10px;
+        }
+
+        .ai-message {
+            background: var(--bg-main);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            animation: slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ai-message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-message-title {
+            font-weight: 700;
+            color: var(--primary-orange);
+            font-size: 1.05rem;
+        }
+
+        .ai-message-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .ai-badge {
+            padding: 0.3rem 0.8rem;
+            background: var(--primary-orange);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .ai-input-area {
+            padding: 1.5rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .ai-input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(242, 107, 56, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .ai-send-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-send-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(242, 107, 56, 0.4);
+        }
+
+        .ai-send-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           RIGHT SECTION - LIVE CHAT
+        ============================================ */
+        .chat-panel {
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 180px);
+            max-height: 1000px;
+            overflow: hidden;
+            position: sticky;
+            top: 120px;
+            animation: fadeInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chat-header {
+            padding: 1.5rem 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chat-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .online-count {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--bg-main);
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-orange);
+            border-radius: 10px;
+        }
+
+        .chat-message {
+            background: var(--bg-main);
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chat-message:hover {
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--primary-orange);
+        }
+
+        .chat-message.lecturer {
+            background: linear-gradient(135deg, rgba(242, 107, 56, 0.1), rgba(242, 107, 56, 0.05));
+            border: 2px solid var(--primary-orange);
+            box-shadow: 0 4px 20px rgba(242, 107, 56, 0.15);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(242, 107, 56, 0.3);
+        }
+
+        .message-username {
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .message-username:hover {
+            color: var(--primary-orange);
+        }
+
+        .message-time {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .message-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .mention {
+            color: var(--primary-orange);
+            font-weight: 600;
+            background: rgba(242, 107, 56, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .gift-section {
+            padding: 1.2rem 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .gift-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .gift-btn {
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .gift-btn.star {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+
+        .gift-btn.heart {
+            background: linear-gradient(135deg, #FF6B6B, #C92A2A);
+            color: white;
+        }
+
+        .gift-btn.sparkle {
+            background: linear-gradient(135deg, #9775FA, #5F3DC4);
+            color: white;
+        }
+
+        .gift-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .gift-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(242, 107, 56, 0.1);
+        }
+
+        .chat-send-btn {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(242, 107, 56, 0.4);
+        }
+
+        /* ============================================
+           FLOATING ANIMATIONS
+        ============================================ */
+        .floating-gift {
+            position: fixed;
+            font-size: 3rem;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUpGift 4s ease-out forwards;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* ============================================
+           KEYFRAME ANIMATIONS
+        ============================================ */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes livePulse {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 20px rgba(242, 107, 56, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 4px 30px rgba(242, 107, 56, 0.6);
+            }
+        }
+
+        @keyframes dotBlink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes floatUpGift {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+        ============================================ */
+        @media (max-width: 1400px) {
+            .main-container {
+                grid-template-columns: 1fr 380px;
+                gap: 2rem;
+            }
+
+            .whiteboard-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 2rem 1.5rem;
+            }
+
+            .chat-panel {
+                position: relative;
+                top: 0;
+                height: 600px;
+            }
+
+            .whiteboard-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .video-content {
+                padding: 2rem;
+            }
+
+            .whiteboard-title {
+                font-size: 2rem;
+            }
+
+            .design-terms {
+                gap: 0.75rem;
+            }
+
+            .design-term {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            /* Mobile tooltip adjustments */
+            .design-term-tooltip {
+                min-width: 160px;
+                max-width: 180px;
+                padding: 0.4rem 0.5rem;
+            }
+            
+            .tooltip-title {
+                font-size: 0.7rem;
+            }
+            
+            .tooltip-translation {
+                font-size: 0.6rem;
+            }
+            
+            .tooltip-description {
+                font-size: 0.65rem;
+            }
+            
+            .tooltip-source {
+                font-size: 0.55rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ============================================
+         HEADER / NAVIGATION - UPDATED WITH HOME AND LECTURE
+    ============================================ -->
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <a href="#" class="logo-link">
+                <img src="Assets\Logo.png" alt="CoLab Logo" class="logo-img">
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="Home_logged.html" class="nav-link">Home</a></li>
+                <li><a href="Lecture.html" class="nav-link">Lecture</a></li>
+                <li><a href="Tut.html" class="nav-link active">Tutorial</a></li>
+                <li><a href="https://canvas.sydney.edu.au/" target="_blank" class="nav-link">Canvas</a></li>
+                <li><a href="Teamup.html" class="nav-link">TeamUp</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    LIVE
+                </div>
+                
+                <!-- Theme Toggle Switch -->
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider">
+                            <span class="slider-icon sun">☀️</span>
+                            <span class="slider-icon moon">🌙</span>
+                        </span>
+                    </label>
+                </div>
+                
+                <!-- Profile Button -->
+                <a href="#" class="profile-btn" aria-label="User Profile">
+                    <img id="profileImg" src="assets/avatar3.png" alt="Profile" class="profile-btn-img">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============================================
+         MAIN TWO-COLUMN LAYOUT
+    ============================================ -->
+    <main class="main-container">
+        <!-- LEFT SECTION: VIDEO + AI CHAT -->
+        <div class="content-section">
+            <!-- VIDEO PLAYER 16:9 -->
+            <div class="video-container">
+                <div class="video-header">
+                    <h2 class="video-title">Typography Composition Workshop</h2>
+                    <div class="video-meta">
+                        <div class="meta-item">
+                            <span>👁️</span>
+                            <span id="viewerCount">1,247</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span id="streamTimer">1:23:45</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-frame">
+                    <div class="video-content">
+                        <h1 class="whiteboard-title">Core Design Principles</h1>
+
+                        <div class="design-terms">
+                            <span class="design-term" data-term="Kerning" data-translation="字距調整" data-description="The adjustment of space between individual letter pairs to achieve visually pleasing and readable typography. Professional designers fine-tune kerning to create harmonious text." data-source="Typography Fundamentals">Kerning</span>
+                            <span class="design-term" data-term="Visual Rhythm" data-translation="視覺節奏" data-description="The pattern created by repeating visual elements that guide the eye through a composition. It creates a sense of organized movement and helps establish visual hierarchy." data-source="Design Systems Theory">Visual Rhythm</span>
+                            <span class="design-term" data-term="Negative Space" data-translation="負空間" data-description="The empty space around and between design elements. Also called white space, it's crucial for creating balance, improving readability, and directing viewer attention." data-source="Gestalt Psychology">Negative Space</span>
+                            <span class="design-term" data-term="Hierarchy" data-translation="視覺層級" data-description="The arrangement of elements to show their order of importance through size, color, contrast, and placement. Good hierarchy guides viewers through content naturally." data-source="Information Architecture">Hierarchy</span>
+                        </div>
+
+                        <div class="key-points">
+                            <strong>Key Principles:</strong><br>
+                            • Proper letter spacing enhances readability<br>
+                            • Baseline grids create vertical rhythm<br>
+                            • White space is an active design element<br>
+                            • Contrast directs attention effectively
+                        </div>
+                    </div>
+
+                    <!-- DRAWING CANVAS OVERLAY -->
+                    <canvas id="drawingCanvas"></canvas>
+                </div>
+
+                <div class="video-controls">
+                    <button class="control-btn" id="penBtn" onclick="activatePen()" aria-label="Pen tool"
+                        title="Draw (Pen)">✏️</button>
+                    <button class="control-btn" id="eraserBtn" onclick="clearCanvas()" aria-label="Clear canvas"
+                        title="Clear All">🧹</button>
+
+                    <div class="color-picker-wrapper">
+                        <button class="control-btn" id="colorBtn" onclick="toggleColorPalette()"
+                            aria-label="Color picker" title="Choose Color">🎨</button>
+                        <div class="color-palette" id="colorPalette">
+                            <div class="color-option selected" style="background: #F26B38;"
+                                onclick="selectColor('#F26B38')"></div>
+                            <div class="color-option" style="background: #FF6B6B;" onclick="selectColor('#FF6B6B')">
+                            </div>
+                            <div class="color-option" style="background: #FFD700;" onclick="selectColor('#FFD700')">
+                            </div>
+                            <div class="color-option" style="background: #4ECDC4;" onclick="selectColor('#4ECDC4')">
+                            </div>
+                            <div class="color-option" style="background: #9775FA;" onclick="selectColor('#9775FA')">
+                            </div>
+                            <div class="color-option" style="background: #000000;" onclick="selectColor('#000000')">
+                            </div>
+                            <div class="color-option" style="background: #FFFFFF; border: 2px solid #ccc;"
+                                onclick="selectColor('#FFFFFF')"></div>
+                            <div class="color-option" style="background: #51CF66;" onclick="selectColor('#51CF66')">
+                            </div>
+                            <div class="color-option" style="background: #FF8787;" onclick="selectColor('#FF8787')">
+                            </div>
+                            <div class="color-option" style="background: #845EF7;" onclick="selectColor('#845EF7')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="control-btn" onclick="document.getElementById('screenshotUpload').click()"
+                        aria-label="Upload screenshot" title="Upload Screenshot">📤</button>
+                    <input type="file" id="screenshotUpload" accept="image/*" style="display: none;"
+                        onchange="handleScreenshotUpload()">
+
+                    <div class="brush-indicator" id="brushIndicator">Drawing: OFF</div>
+                </div>
+            </div>
+
+            <!-- AI CHAT SECTION -->
+            <div class="ai-chat-section">
+                <div class="ai-chat-header">
+                    <span class="ai-icon">🤖</span>
+                    <h3>AI Design Assistant</h3>
+                </div>
+
+                <div class="ai-messages" id="aiMessages">
+                    <div class="ai-message">
+                        <div class="ai-message-header">
+                            <span class="ai-message-title">Welcome!</span>
+                            <span class="ai-badge">AI</span>
+                        </div>
+                        <div class="ai-message-content">
+                            Hi! I'm your AI design assistant. Hover over any highlighted term in the video above to see detailed explanations, or ask me questions about typography and design principles.
+                        </div>
+                    </div>
+
+                    <div class="ai-message">
+                        <div class="ai-message-header">
+                            <span class="ai-message-title">Drawing Tools Active!</span>
+                            <span class="ai-badge">AI</span>
+                        </div>
+                        <div class="ai-message-content">
+                            Try the drawing tools! Click the pen icon ✏️ to draw annotations on the whiteboard. Use the
+                            color picker 🎨 to change colors, and the eraser 🧹 to clear your drawings.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-input-area">
+                    <div class="ai-input-wrapper">
+                        <input type="text" class="ai-input" id="aiInput"
+                            placeholder="Ask about design terms or principles..." aria-label="AI assistant input">
+                        <button class="ai-send-btn" onclick="sendAIMessage()">
+                            <span>Ask AI</span>
+                            <span>🚀</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SECTION: LIVE CHAT -->
+        <aside class="chat-panel">
+            <div class="chat-header">
+                <h3>💬 Live Chat</h3>
+                <div class="online-count">
+                    <span id="onlineCount">847</span> viewers online
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message">
+                    <div class="message-header">
+                        <div class="message-avatar">👩</div>
+                        <span class="message-username">Sarah_Design</span>
+                        <span class="message-time">3m ago</span>
+                    </div>
+                    <p class="message-text"><span class="mention">@Dr. Lee</span> can you explain the baseline grid
+                        again?</p>
+                </div>
+
+                <div class="chat-message lecturer">
+                    <div class="message-header">
+                        <div class="message-avatar">👩‍🏫</div>
+                        <span class="message-username">Dr. Hannah Lee</span>
+                        <span class="message-time">2m ago</span>
+                    </div>
+                    <p class="message-text">Great question! The baseline grid ensures vertical rhythm. I'll demonstrate
+                        it now on the board.</p>
+                </div>
+
+                <div class="chat-message">
+                    <div class="message-header">
+                        <div class="message-avatar">👨</div>
+                        <span class="message-username">Alex_Dev</span>
+                        <span class="message-time">1m ago</span>
+                    </div>
+                    <p class="message-text">Love the way you structure hierarchy 🔥</p>
+                </div>
+
+                <div class="chat-message">
+                    <div class="message-header">
+                        <div class="message-avatar">✨</div>
+                        <span class="message-username">Maya_UX</span>
+                        <span class="message-time">45s ago</span>
+                    </div>
+                    <p class="message-text">This is so helpful! Taking notes 📝</p>
+                </div>
+
+                <div class="chat-message">
+                    <div class="message-header">
+                        <div class="message-avatar">🎨</div>
+                        <span class="message-username">Tom_Designer</span>
+                        <span class="message-time">30s ago</span>
+                    </div>
+                    <p class="message-text">Gifted 3 ✨ sparkles to Dr. Lee!</p>
+                </div>
+            </div>
+
+            <div class="gift-section">
+                <div class="gift-buttons">
+                    <button class="gift-btn star" onclick="sendGift('⭐')">⭐ Star</button>
+                    <button class="gift-btn heart" onclick="sendGift('❤️')">❤️ Heart</button>
+                    <button class="gift-btn sparkle" onclick="sendGift('✨')">✨ Sparkle</button>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Send a message or @mention..."
+                        aria-label="Chat input">
+                    <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- ============================================
+         JAVASCRIPT
+    ============================================ -->
+    <script>
+        (function restoreAvatar() {
+                const raw = localStorage.getItem('avatarSelection');
+                if (!raw) return;
+                try {
+                    const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
+                    // 导航栏按钮里的小头像
+                    if (avatarSrc) {
+                        const img = document.getElementById('profileImg');
+                        if (img) img.src = avatarSrc;
+                    }
+                    // 导航栏“圆形按钮”的背景（支持纯色或渐变）
+                    const bg = bgStyle || bgColor;
+                    if (bg) {
+                        const btn = document.querySelector('.profile-btn');
+                        if (btn) btn.style.background = bg;
+                    }
+                } catch (e) {
+                    console.warn('Failed to parse avatarSelection', e);
+                }
+            })();
+        // ============================================
+        // TOOLTIP SYSTEM - Create and manage floating tooltips
+        // ============================================
+        
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'design-term-tooltip';
+        document.body.appendChild(tooltip);
+        
+        // Add event listeners to all design terms
+        const designTerms = document.querySelectorAll('.design-term');
+        let tooltipTimeout;
+        
+        designTerms.forEach(term => {
+            term.addEventListener('mouseenter', function(e) {
+                clearTimeout(tooltipTimeout);
+                const rect = this.getBoundingClientRect();
+                const termData = {
+                    title: this.dataset.term,
+                    translation: this.dataset.translation,
+                    description: this.dataset.description,
+                    source: this.dataset.source
+                };
+                
+                // Set tooltip content
+                tooltip.innerHTML = `
+                    <div class="tooltip-title">${termData.title}</div>
+                    <div class="tooltip-translation">${termData.translation}</div>
+                    <div class="tooltip-description">${termData.description}</div>
+                    <div class="tooltip-source">Source: ${termData.source}</div>
+                `;
+                
+                // Position tooltip above the term
+                const tooltipRect = tooltip.getBoundingClientRect();
+                let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+                let top = rect.top - tooltipRect.height - 10;
+                
+                // Keep tooltip within viewport
+                if (left < 10) left = 10;
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+                if (top < 10) {
+                    top = rect.bottom + 10; // Show below if not enough space above
+                }
+                
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+                
+                // Show tooltip with delay
+                tooltipTimeout = setTimeout(() => {
+                    tooltip.classList.add('show');
+                }, 100);
+            });
+            
+            term.addEventListener('mouseleave', function() {
+                clearTimeout(tooltipTimeout);
+                tooltip.classList.remove('show');
+            });
+        });
+        
+        // ============================================
+        // DRAWING CANVAS SYSTEM
+        // ============================================
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let drawingEnabled = false;
+        let currentColor = '#F26B38';
+        let lastX = 0;
+        let lastY = 0;
+
+        // Set canvas size to match video frame
+        function resizeCanvas() {
+            const videoFrame = canvas.parentElement;
+            canvas.width = videoFrame.offsetWidth;
+            canvas.height = videoFrame.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function activatePen() {
+            drawingEnabled = !drawingEnabled;
+            const penBtn = document.getElementById('penBtn');
+            const canvas = document.getElementById('drawingCanvas');
+            const brushIndicator = document.getElementById('brushIndicator');
+
+            if (drawingEnabled) {
+                penBtn.classList.add('active');
+                canvas.classList.add('active');
+                brushIndicator.textContent = 'Drawing: ON';
+                brushIndicator.style.color = 'var(--primary-orange)';
+            } else {
+                penBtn.classList.remove('active');
+                canvas.classList.remove('active');
+                brushIndicator.textContent = 'Drawing: OFF';
+                brushIndicator.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            addAIMessage('AI Assistant', '✨ Canvas cleared! Ready for new annotations.', true);
+        }
+
+        function toggleColorPalette() {
+            const palette = document.getElementById('colorPalette');
+            palette.classList.toggle('show');
+        }
+
+        function selectColor(color) {
+            currentColor = color;
+
+            // Update selected state
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+
+            // Close palette
+            document.getElementById('colorPalette').classList.remove('show');
+        }
+
+        // Drawing event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch support
+        canvas.addEventListener('touchstart', handleTouchStart);
+        canvas.addEventListener('touchmove', handleTouchMove);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) {
+            if (!drawingEnabled) return;
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function draw(e) {
+            if (!isDrawing || !drawingEnabled) return;
+
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouchStart(e) {
+            if (!drawingEnabled) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            lastX = touch.clientX - rect.left;
+            lastY = touch.clientY - rect.top;
+            isDrawing = true;
+        }
+
+        function handleTouchMove(e) {
+            if (!isDrawing || !drawingEnabled) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            [lastX, lastY] = [x, y];
+        }
+
+        // Close color palette when clicking outside
+        document.addEventListener('click', (e) => {
+            const palette = document.getElementById('colorPalette');
+            const colorBtn = document.getElementById('colorBtn');
+            if (!palette.contains(e.target) && e.target !== colorBtn) {
+                palette.classList.remove('show');
+            }
+        });
+
+        // ============================================
+        // THEME TOGGLE - Updated for switch
+        // ============================================
+        const themeToggleSwitch = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        themeToggleSwitch.checked = currentTheme === 'dark';
+
+        themeToggleSwitch.addEventListener('change', () => {
+            const newTheme = themeToggleSwitch.checked ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        
+        
+        // ============================================
+        // PROFILE DROPDOWN SYSTEM
+        // ============================================
+        const profileBtn = document.querySelector('.profile-btn');
+        let profileDropdown = null;
+        
+        // Create profile dropdown
+       // Create profile dropdown
+        function createProfileDropdown() {
+            // 从 localStorage 读一次，供下拉使用
+            let avatarSrcFromStore = 'assets/avatar3.png';
+            let avatarBgFromStore = '';
+            try {
+                const raw = localStorage.getItem('avatarSelection');
+                if (raw) {
+                    const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
+                    if (avatarSrc) avatarSrcFromStore = avatarSrc;
+                    const bg = bgStyle || bgColor;
+                    if (bg) avatarBgFromStore = bg;
+                }
+            } catch (e) {
+                console.warn('Failed to parse avatarSelection for dropdown', e);
+            }
+
+            const dropdown = document.createElement('div');
+            dropdown.className = 'profile-dropdown';
+            dropdown.innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar" ${avatarBgFromStore ? `style="background:${avatarBgFromStore};"` : ''}>
+        <img src="${avatarSrcFromStore}" alt="Aiden Y" class="profile-avatar-img">
+      </div>
+      <div class="profile-info">
+        <h3 class="profile-name">Aiden Y</h3>
+        <p class="profile-email">aiden.y@sydney.edu.au</p>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div class="stat-item">
+        <span class="stat-value">42</span>
+        <span class="stat-label">Courses</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">98%</span>
+        <span class="stat-label">Progress</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">A+</span>
+        <span class="stat-label">Grade</span>
+      </div>
+    </div>
+    <div class="profile-menu">
+      <a href="#" class="profile-menu-item">
+        <span>👤</span>
+        <span>View Profile</span>
+      </a>
+      <a href="#" class="profile-menu-item">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </a>
+      <a href="#" class="profile-menu-item">
+        <span>📚</span>
+        <span>My Courses</span>
+      </a>
+      <a href="#" class="profile-menu-item">
+        <span>🏆</span>
+        <span>Achievements</span>
+      </a>
+      <div class="profile-divider"></div>
+      <a href="#" class="profile-menu-item logout">
+        <span>🚪</span>
+        <span>Sign Out</span>
+      </a>
+    </div>
+  `;
+            document.body.appendChild(dropdown);
+            return dropdown;
+        }
+
+        
+        // Position dropdown
+        function positionDropdown() {
+            if (!profileDropdown) return;
+            const rect = profileBtn.getBoundingClientRect();
+            profileDropdown.style.top = `${rect.bottom + 10}px`;
+            profileDropdown.style.right = `${window.innerWidth - rect.right}px`;
+        }
+        
+        // Toggle dropdown
+        profileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!profileDropdown) {
+                profileDropdown = createProfileDropdown();
+                setTimeout(() => {
+                    profileDropdown.classList.add('show');
+                    positionDropdown();
+                }, 10);
+            } else {
+                if (profileDropdown.classList.contains('show')) {
+                    profileDropdown.classList.remove('show');
+                    setTimeout(() => {
+                        profileDropdown.remove();
+                        profileDropdown = null;
+                    }, 300);
+                } else {
+                    profileDropdown.classList.add('show');
+                    positionDropdown();
+                }
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (profileDropdown && !profileDropdown.contains(e.target) && e.target !== profileBtn) {
+                profileDropdown.classList.remove('show');
+                setTimeout(() => {
+                    profileDropdown.remove();
+                    profileDropdown = null;
+                }, 300);
+            }
+        });
+        
+        // Update position on window resize
+        window.addEventListener('resize', positionDropdown);
+
+        // ============================================
+        // HEADER SCROLL EFFECT
+        // ============================================
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ============================================
+        // LIVE CHAT SYSTEM
+        // ============================================
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            const message = document.createElement('div');
+            message.className = 'chat-message';
+            message.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar">👤</div>
+                    <span class="message-username">You</span>
+                    <span class="message-time">now</span>
+                </div>
+                <p class="message-text">${escapeHtml(text)}</p>
+            `;
+
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatInput.value = '';
+
+            if (text.includes('@Dr. Lee') || text.includes('@Instructor')) {
+                setTimeout(addLecturerResponse, 2000);
+            }
+        }
+
+        function addLecturerResponse() {
+            const response = document.createElement('div');
+            response.className = 'chat-message lecturer';
+            response.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar">👩‍🏫</div>
+                    <span class="message-username">Dr. Hannah Lee</span>
+                    <span class="message-time">now</span>
+                </div>
+                <p class="message-text">Thanks for your question! I'll address that shortly.</p>
+            `;
+
+            chatMessages.appendChild(response);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+        }
+
+        // ============================================
+        // GIFT ANIMATION SYSTEM
+        // ============================================
+        function sendGift(emoji) {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const gift = document.createElement('div');
+                    gift.className = 'floating-gift';
+                    gift.textContent = emoji;
+                    gift.style.left = (Math.random() * window.innerWidth) + 'px';
+                    gift.style.bottom = '0px';
+
+                    document.body.appendChild(gift);
+
+                    setTimeout(() => gift.remove(), 4000);
+                }, i * 100);
+            }
+
+            const giftMsg = document.createElement('div');
+            giftMsg.className = 'chat-message';
+            giftMsg.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar">👤</div>
+                    <span class="message-username">You</span>
+                    <span class="message-time">now</span>
+                </div>
+                <p class="message-text">Sent ${emoji} gift to Dr. Lee!</p>
+            `;
+            chatMessages.appendChild(giftMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ============================================
+        // AI ASSISTANT SYSTEM
+        // ============================================
+        const aiInput = document.getElementById('aiInput');
+        const aiMessages = document.getElementById('aiMessages');
+
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendAIMessage();
+        });
+
+        function sendAIMessage() {
+            const text = aiInput.value.trim();
+            if (!text) return;
+
+            addAIMessage('You', text, false);
+            aiInput.value = '';
+
+            setTimeout(() => {
+                const response = `I understand you're asking about "${text}". ${getAIResponse(text)}`;
+                addAIMessage('AI Assistant', response, true);
+            }, 1000);
+        }
+
+        function getAIResponse(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('kerning')) return 'Kerning is essential for professional typography. It involves adjusting spacing between letter pairs for optimal readability.';
+            if (lower.includes('hierarchy')) return 'Visual hierarchy helps organize information by importance. Use size, weight, color, and spacing to create clear levels.';
+            if (lower.includes('space') || lower.includes('white')) return 'Negative space (white space) is a powerful design tool. It improves focus, readability, and creates visual breathing room.';
+            if (lower.includes('draw') || lower.includes('pen')) return 'Great question! You can use the pen tool (✏️) to draw annotations directly on the whiteboard. Try clicking it to activate drawing mode!';
+            return 'That\'s a great design question! Consider how it relates to visual balance, hierarchy, and user experience. Would you like me to elaborate on any specific aspect?';
+        }
+
+        function addAIMessage(sender, content, isAI) {
+            const message = document.createElement('div');
+            message.className = 'ai-message';
+            message.innerHTML = `
+                <div class="ai-message-header">
+                    <span class="ai-message-title">${sender}</span>
+                    ${isAI ? '<span class="ai-badge">AI</span>' : ''}
+                </div>
+                <div class="ai-message-content">${content}</div>
+            `;
+
+            aiMessages.appendChild(message);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        function handleScreenshotUpload() {
+            const file = document.getElementById('screenshotUpload').files[0];
+            if (!file) return;
+
+            addAIMessage('AI Assistant', '📤 Analyzing your screenshot...', true);
+
+            setTimeout(() => {
+                addAIMessage('AI Assistant',
+                    '<strong>✨ Screenshot Analysis Complete</strong><br><br>' +
+                    'I detected a <strong>Grid System</strong> in your screenshot. ' +
+                    'This structured layout uses columns and rows to create consistent, balanced compositions. ' +
+                    'Modern grid systems typically use 12 or 16 columns for maximum flexibility.<br><br>' +
+                    '<strong>Tip:</strong> You can now use the drawing tools to annotate this analysis directly on the whiteboard!',
+                    true
+                );
+            }, 1500);
+        }
+
+        // ============================================
+        // LIVE STREAM SIMULATION
+        // ============================================
+        let viewerCount = 1247;
+        let onlineCount = 847;
+        let seconds = 0, minutes = 23, hours = 1;
+
+        setInterval(() => {
+            viewerCount += Math.floor(Math.random() * 20) - 8;
+            viewerCount = Math.max(1000, viewerCount);
+            document.getElementById('viewerCount').textContent = viewerCount.toLocaleString();
+
+            onlineCount += Math.floor(Math.random() * 10) - 4;
+            onlineCount = Math.max(500, onlineCount);
+            document.getElementById('onlineCount').textContent = onlineCount;
+        }, 5000);
+
+        setInterval(() => {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+
+            document.getElementById('streamTimer').textContent =
+                `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+
+        // ============================================
+        // AUTO CHAT MESSAGES
+        // ============================================
+        const demoMessages = [
+            { user: 'Lisa_Creative', avatar: '🎨', text: 'Can we get the slides after the stream?' },
+            { user: 'Mark_Student', avatar: '📚', text: 'Taking notes! Great explanations 👍' },
+            { user: 'Nina_UX', avatar: '✨', text: 'The visual examples are perfect!' },
+            { user: 'Chris_Designer', avatar: '🎯', text: 'This workshop is incredibly helpful' }
+        ];
+
+        let msgIndex = 0;
+        setInterval(() => {
+            if (chatMessages.children.length < 12) {
+                const demo = demoMessages[msgIndex % demoMessages.length];
+                const msg = document.createElement('div');
+                msg.className = 'chat-message';
+                msg.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-avatar">${demo.avatar}</div>
+                        <span class="message-username">${demo.user}</span>
+                        <span class="message-time">now</span>
+                    </div>
+                    <p class="message-text">${demo.text}</p>
+                `;
+
+                chatMessages.appendChild(msg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                msgIndex++;
+            }
+        }, 18000);
+
+        console.log('✨ Tutorial Live Page with Drawing Tools and Tooltips loaded!');
+        console.log('🎨 Hover over design terms to see explanations!');
+        console.log('✏️ Try the pen tool to draw on the whiteboard!');
+    </script>
+</body>
+
+</html>

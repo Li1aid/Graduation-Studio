@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Avatar3</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* RESET */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    :root {
+      --primary-orange: #F26B38;
+      --primary-orange-dark: #D95A2A;
+      --orange-glow: rgba(242, 107, 56, .25);
+      --bg-main: #FAFAFA;
+      --bg-card: #FFFFFF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #4A4A4A;
+      --border-color: #E8E8E8;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, .06);
+      --shadow-md: 0 6px 24px rgba(0, 0, 0, .10);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+
+      /* 流式尺寸 */
+      --page-gap: clamp(16px, 2vw, 32px);
+      --col-max: clamp(560px, 48vw, 680px);
+      --radius-lg: clamp(20px, 3vw, 36px);
+      --radius-md: clamp(12px, 1.6vw, 16px);
+      --fs-h1: clamp(22px, 2.2vw, 32px);
+      --fs-h2: clamp(16px, 1.6vw, 20px);
+      --fs-btn: clamp(14px, 1.2vw, 16px);
+
+      /* 新增：统一控制预览框尺寸（与 Avatar1/2 保持一致） */
+      --preview-size: clamp(260px, 34vw, 420px);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans";
+    }
+
+    /* 页面布局：桌面双栏、移动单栏 */
+    .page {
+      min-height: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, var(--col-max)) minmax(320px, 1fr);
+      gap: var(--page-gap);
+      align-items: center;
+      /* 关键：两栏在桌面端垂直中线对齐 */
+      padding: env(safe-area-inset-top) clamp(12px, 4vw, 40px) env(safe-area-inset-bottom) clamp(12px, 4vw, 40px);
+    }
+
+    @media (max-width:960px) {
+      .page {
+        grid-template-columns: 1fr;
+        align-items: start;
+        /* 移动端从上往下排 */
+      }
+    }
+
+    /* 左列 */
+    .avatar-left {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: clamp(12px, 1.8vw, 20px);
+      margin-inline: auto;
+      width: 100%;
+      max-width: unset;
+      /* 尺寸交给预览变量控制 */
+      justify-items: center;
+      /* 标题/预览/按钮水平居中 */
+      align-self: center;
+      /* 与右侧同一垂直中线 */
+    }
+
+    .avatar-title {
+      font-family: "Merriweather", serif;
+      font-size: var(--fs-h1);
+      font-weight: 900;
+      line-height: 1.2;
+      opacity: 0;
+      animation: slideInDown .8s var(--ease) forwards;
+      /* 不改变文字对齐位置，保持你原有视觉 */
+    }
+
+    /* 预览框：正方形 + 尺寸变量控制 */
+    .avatar-preview {
+      width: var(--preview-size);
+      height: var(--preview-size);
+      aspect-ratio: auto;
+      background: #b8d8ff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp .6s ease .08s forwards;
+    }
+
+    .avatar-preview:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 按钮行：改为居中 */
+    .action-row {
+      display: flex;
+      justify-content: center;
+      /* 关键：居中排列 */
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp .6s ease .16s forwards;
+    }
+
+    .back-box,
+    .save-box {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5em;
+      padding: clamp(10px, 1.2vw, 12px) clamp(14px, 1.8vw, 18px);
+      border-radius: var(--radius-md);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: var(--fs-btn);
+      font-family: "Merriweather", serif;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .12);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      white-space: nowrap;
+    }
+
+    .back-box {
+      background: linear-gradient(135deg, var(--text-secondary), var(--text-primary));
+    }
+
+    .save-box {
+      background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+      box-shadow: 0 4px 15px rgba(242, 107, 56, .3);
+    }
+
+    .save-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      left: -100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3), transparent);
+      transition: left .6s ease;
+    }
+
+    .save-box:hover::before {
+      left: 100%;
+    }
+
+    .back-box:hover,
+    .save-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+    }
+
+    /* 右列 */
+    .avatar-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--page-gap);
+      width: 100%;
+      max-width: min(900px, 92vw);
+      margin-inline: auto;
+      opacity: 0;
+      transform: translateX(60px);
+      animation: slideInRight .9s ease .08s forwards;
+      align-self: center;
+      /* 关键：与左侧对齐到同一垂直中线（桌面端） */
+    }
+
+    @media (max-width:960px) {
+      .avatar-right {
+        transform: none;
+        animation: none;
+        opacity: 1;
+        align-self: auto;
+        /* 小屏恢复自然流 */
+      }
+    }
+
+    /* 自我介绍 */
+    .avatar-bio-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .avatar-bio-box h2 {
+      font-family: "Merriweather", serif;
+      font-weight: 900;
+      line-height: 1.2;
+      font-size: var(--fs-h2);
+      margin: .2rem 0 .6rem;
+    }
+
+    .avatar-bio-box textarea {
+      resize: none;
+      width: 100%;
+      height: 180px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans";
+      line-height: 1.5;
+      color: var(--text-primary);
+      background: #F2F2F2;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, .05);
+      transition: all .3s var(--ease);
+    }
+
+    .avatar-bio-box textarea:hover,
+    .avatar-bio-box textarea:focus {
+      background: #fff;
+      border-color: var(--primary-orange);
+      box-shadow: 0 0 10px var(--orange-glow);
+      outline: none;
+    }
+
+    /* 作品上传区 */
+    .portfolio-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .portfolio-section h2 {
+      font-family: "Merriweather", serif;
+      font-weight: 900;
+      line-height: 1.2;
+      font-size: var(--fs-h2);
+      margin: .6rem 0;
+    }
+
+    .portfolio-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      gap: 12px;
+      padding: 14px;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .thumb-vert {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #F2F2F2;
+      border: 1px dashed var(--border-color);
+    }
+
+    .thumb-vert img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .upload-spot {
+      display: grid;
+      place-items: center;
+      gap: 6px;
+      padding: 10px;
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      background: #F2F2F2;
+      cursor: pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+      user-select: none;
+    }
+
+    .upload-spot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+      border-color: var(--primary-orange);
+      background: #fff;
+    }
+
+    .upload-spot.drag {
+      border-color: var(--primary-orange);
+      box-shadow: 0 8px 22px rgba(242, 107, 56, .25);
+      background: #fff;
+    }
+
+    .upload-icon {
+      font-size: 42px;
+      line-height: 1;
+      color: var(--primary-orange);
+      font-weight: 900;
+    }
+
+    .upload-text {
+      text-align: center;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .portfolio-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .file-path {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: #F2F2F2;
+      color: var(--text-primary);
+      font-size: .95rem;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, .04);
+      transition: all .2s var(--ease);
+    }
+
+    .file-path:hover,
+    .file-path:focus {
+      outline: none;
+      border-color: var(--primary-orange);
+      background: #fff;
+      box-shadow: 0 0 8px var(--orange-glow);
+    }
+
+    .upload-btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+      box-shadow: 0 4px 15px rgba(242, 107, 56, .28);
+      cursor: pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      font-family: "Merriweather", serif;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(242, 107, 56, .4);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 动效 */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-28px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(60px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    /* 小屏优化 */
+    @media (max-width:780px) {
+      .portfolio-box {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .upload-spot {
+        grid-column: 1 / -1;
+        aspect-ratio: 5 / 2;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      .avatar-title,
+      .avatar-preview,
+      .action-row,
+      .avatar-right {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .avatar-preview,
+      .upload-spot,
+      .back-box,
+      .save-box,
+      .file-path,
+      .upload-btn {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <!-- 左列 -->
+    <section class="avatar-left">
+      <h1 class="avatar-title">More about me...</h1>
+
+      <div class="avatar-preview" id="preview" aria-label="Avatar preview area">
+        <img id="avatarImg" src="Assets/Avatar8.png" alt="Avatar preview">
+      </div>
+
+      <div class="action-row">
+        <a href="Avatar2.html" class="back-box" id="backBtn" aria-label="Go back">← Back</a>
+        <a href="Home_logged.html" class="save-box" id="saveBtn" aria-label="Save avatar">💾 Save</a>
+      </div>
+    </section>
+
+    <!-- 右列 -->
+    <aside class="avatar-right">
+      <div class="avatar-bio-box">
+        <h2>My introduction</h2>
+        <textarea id="MyIntro" placeholder="Write something about yourself..."></textarea>
+      </div>
+
+      <section class="portfolio-section">
+        <h2>My Portfolio</h2>
+
+        <div class="portfolio-box" id="portfolioBox">
+          <div class="thumb-vert"><img id="pfThumb1" src="Assets/port1.png" alt="Preview 1" /></div>
+          <div class="thumb-vert"><img id="pfThumb2" src="Assets/port2.png" alt="Preview 2" /></div>
+
+          <button class="upload-spot" id="chooseFilesBtn" type="button" aria-label="Choose files">
+            <div class="upload-icon">⬆</div>
+            <div class="upload-text">Select<br>images</div>
+          </button>
+          <input type="file" id="pfInput" accept="image/*" multiple hidden>
+        </div>
+
+        <div class="portfolio-controls">
+          <input class="file-path" id="pfPath" type="text" placeholder="No files selected" readonly>
+          <button class="upload-btn" id="uploadBtn" type="button">Upload</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script>
+    // --- 保留头像（从上一页写入的 localStorage 读取） ---
+    // --- Restore avatar selection (from Avatar1) ---
+      (function restoreAvatar() {
+        const raw = localStorage.getItem('avatarSelection');
+        if (!raw) return;
+        try {
+          const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
+          if (avatarSrc) document.getElementById('avatarImg').src = avatarSrc;
+          const bg = bgStyle || bgColor;
+          if (bg) document.getElementById('preview').style.background = bg;
+        } catch (e) { console.warn('Failed to parse avatarSelection', e); }
+      })();
+
+    // --- 仅上传/预览 + 替换 + 删除（不做持久化） ---
+    let currentPortfolio = [];            // 仅存放本页会话内的图片 DataURL
+    const MAX_IMAGES = 6;
+    let replaceIndex = null;              // null = 新增；数字 = 替换对应槽位
+
+    // DOM
+    const pfInput = document.getElementById('pfInput');
+    const chooseFilesBtn = document.getElementById('chooseFilesBtn');
+    const pfPath = document.getElementById('pfPath');
+    const pfThumb1 = document.getElementById('pfThumb1');
+    const pfThumb2 = document.getElementById('pfThumb2');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    // 触发系统文件选择（新增模式）
+    chooseFilesBtn.addEventListener('click', () => {
+      replaceIndex = null;
+      pfInput.click();
+    });
+
+    // 选择文件
+    pfInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+
+      const toRead = (replaceIndex === null)
+        ? files.slice(0, Math.max(0, MAX_IMAGES - currentPortfolio.length))
+        : files.slice(0, 1); // 替换只取1个
+
+      readFilesAsDataURL(toRead).then(urls => {
+        if (replaceIndex === null) {
+          currentPortfolio = currentPortfolio.concat(urls).slice(0, MAX_IMAGES); // 新增
+        } else {
+          currentPortfolio[replaceIndex] = urls[0]; // 替换
+          replaceIndex = null;
+        }
+        refreshThumbnails();
+        refreshFilePath(files.map(f => f.name));
+      });
+
+      pfInput.value = ''; // 允许选择同一文件重复触发
+    });
+
+    // 拖拽上传（新增模式）
+    ['dragenter', 'dragover'].forEach(evt => {
+      chooseFilesBtn.addEventListener(evt, e => {
+        e.preventDefault(); e.stopPropagation();
+        chooseFilesBtn.classList.add('drag');
+      });
+    });
+    ['dragleave', 'dragend', 'drop'].forEach(evt => {
+      chooseFilesBtn.addEventListener(evt, e => {
+        e.preventDefault(); e.stopPropagation();
+        chooseFilesBtn.classList.remove('drag');
+      });
+    });
+    chooseFilesBtn.addEventListener('drop', e => {
+      replaceIndex = null; // 新增
+      const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+      const remain = Math.max(0, MAX_IMAGES - currentPortfolio.length);
+      readFilesAsDataURL(files.slice(0, remain)).then(urls => {
+        currentPortfolio = currentPortfolio.concat(urls).slice(0, MAX_IMAGES);
+        refreshThumbnails(); refreshFilePath(files.map(f => f.name));
+      });
+    });
+
+    // “Upload” 按钮：当作再次选择（不发送服务器）
+    uploadBtn.addEventListener('click', () => {
+      replaceIndex = null;
+      pfInput.click();
+    });
+
+    // 点击缩略图 => 替换；右键 => 删除
+    [pfThumb1, pfThumb2].forEach((thumb, idx) => {
+      if (!thumb) return;
+
+      // 替换该槽
+      thumb.addEventListener('click', () => {
+        if (!currentPortfolio[idx]) return; // 没有已选内容时，点击无动作
+        replaceIndex = idx;
+        pfInput.click();
+      });
+
+      // 删除该槽
+      thumb.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        if (!currentPortfolio[idx]) return;
+        if (confirm('Remove this image?')) {
+          currentPortfolio.splice(idx, 1);  // 删除并前移
+          refreshThumbnails();
+          refreshFilePath();
+        }
+      });
+    });
+
+    // 工具函数
+    function readFilesAsDataURL(files) {
+      return Promise.all(files.map(file => new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      })));
+    }
+
+    function refreshThumbnails() {
+      setThumb(pfThumb1, 0, 'Assets/port1.png');
+      setThumb(pfThumb2, 1, 'Assets/port2.png');
+    }
+    function setThumb(imgEl, idx, placeholder) {
+      if (!imgEl) return;
+      const url = currentPortfolio[idx];
+      imgEl.src = url || placeholder;
+    }
+
+    function refreshFilePath(names) {
+      if (Array.isArray(names) && names.length) {
+        pfPath.value = names.join(', ');
+      } else if (currentPortfolio.length) {
+        pfPath.value = `Selected ${currentPortfolio.length} image(s)`;
+      } else {
+        pfPath.value = 'No files selected';
+      }
+    }
+  </script>
+
+
+
+</body>
+
+</html>
