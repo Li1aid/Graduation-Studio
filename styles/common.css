@@ -759,7 +759,7 @@ h4 {
     }
 
     .logo-img {
-        height: 40px;
+        height: 35px;
     }
 
     .nav-right {
@@ -774,10 +774,11 @@ h4 {
     .slider::before {
         height: 20px;
         width: 20px;
+        left: 2px;
     }
 
     .theme-switch input:checked~.slider::before {
-        transform: translateX(22px);
+        transform: translateY(-50%) translateX(20px);
     }
 
     .profile-btn {

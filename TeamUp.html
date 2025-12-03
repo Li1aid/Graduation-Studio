@@ -144,6 +144,23 @@
       list-style: none
     }
 
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--mid-grey);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      margin-left: auto;
+    }
+
+    .mobile-menu-btn:hover {
+      color: var(--primary-orange);
+      transform: scale(1.1);
+    }
+
     .nav-link {
       position: relative;
       color: var(--mid-grey);
@@ -961,6 +978,56 @@
         padding: 1rem 1.75rem
       }
 
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: var(--card-bg);
+        padding: 120px 1.5rem 2rem;
+        gap: 0;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: none;
+        z-index: 999;
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        display: flex;
+      }
+
+      .nav-menu.active li {
+        width: 100%;
+      }
+
+      .nav-menu.active .nav-link {
+        display: block;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .nav-menu.active .nav-link::after {
+        display: none;
+      }
+
+      .nav-menu.active .nav-link:hover,
+      .nav-menu.active .nav-link.active {
+        background: var(--page-bg);
+      }
+
       .wrap {
         padding: 24px 16px 48px;
         margin-top: 120px
@@ -1081,6 +1148,8 @@
         <img src="Assets\Logo.png" alt="CoLab Logo" class="logo-img">
       </a>
 
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">☰</button>
+
       <ul class="nav-menu" id="navMenu">
         <li><a href="Home_logged.html" class="nav-link">Home</a></li>
         <li><a href="Lecture.html" class="nav-link">Lecture</a></li>
@@ -1177,6 +1246,32 @@
       if (window.pageYOffset > 50) navbar.classList.add('scrolled');
       else navbar.classList.remove('scrolled');
     });
+
+    /* ============ Mobile menu toggle ============ */
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (mobileMenuBtn && navMenu) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        navMenu.classList.toggle('active');
+      });
+
+      // Close menu when clicking on a link
+      navMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+          navMenu.classList.remove('active');
+        }
+      });
+    }
 
     /* ============ Active nav link highlight ============ */
     document.querySelectorAll('.nav-link').forEach(link => {

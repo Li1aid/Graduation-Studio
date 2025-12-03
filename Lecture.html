@@ -1242,56 +1242,94 @@
 
         @media (max-width: 640px) {
             .main-container {
-                padding: 0 20px 60px;
+                padding: 0 16px 60px;
+                margin-top: 110px;
             }
             
             .lecture-details {
-                padding: 24px;
+                padding: 16px;
             }
             
             .info-card {
-                padding: 24px;
+                padding: 16px;
+            }
+            
+            .lecture-title {
+                font-size: 1.3rem;
+            }
+            
+            .lecture-meta {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .meta-badge {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+            
+            .lecture-description {
+                font-size: 0.95rem;
             }
             
             .video-controls {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
                 flex-direction: column;
                 align-items: stretch;
-                gap: 12px;
+                gap: 8px;
+                padding: 12px;
+                background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+                border-radius: 0;
             }
 
             .controls-left {
-                justify-content: center;
-                flex-direction: column;
-                gap: 8px;
+                justify-content: space-around;
+                flex-direction: row;
+                gap: 6px;
+                width: 100%;
             }
 
             .quiz-button {
                 width: 100%;
                 justify-content: center;
-                padding: 12px 24px;
-                font-size: 14px;
+                padding: 10px 16px;
+                font-size: 13px;
+                margin-top: 8px;
             }
 
             .play-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 18px;
-                align-self: center;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                padding: 0;
+                flex-shrink: 0;
             }
 
             .time-info {
                 text-align: center;
-                font-size: 14px;
+                font-size: 12px;
+                white-space: nowrap;
             }
 
             .video-wrapper {
                 aspect-ratio: 16 / 9;
-                min-height: 280px;
+                min-height: 240px;
+                position: relative;
             }
 
             .video-overlay {
-                padding: 20px 20px 80px;
+                padding: 12px 12px 110px 12px;
                 opacity: 1;
+                bottom: 0;
+                height: auto;
+                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.7), transparent);
+            }
+            
+            .progress-container {
+                margin-bottom: 10px;
             }
         }
 
@@ -1301,27 +1339,55 @@
             }
             
             .main-container {
-                padding: 0 16px 40px;
-                margin-top: 110px;
+                padding: 0 12px 40px;
+                margin-top: 100px;
             }
-            
-            .lecture-title {
-                font-size: 24px;
-            }
-            
+
             .lecture-details {
-                padding: 20px;
+                padding: 12px;
             }
-            
-            .info-card {
-                padding: 20px;
+
+            .lecture-title {
+                font-size: 1.1rem;
             }
-            
-            .nav-menu {
-                padding: 24px;
-                gap: 20px;
+
+            .lecture-meta {
+                gap: 0.3rem;
             }
-            
+
+            .meta-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .video-wrapper {
+                min-height: 200px;
+                aspect-ratio: 16 / 9;
+            }
+
+            .video-overlay {
+                padding: 10px 10px 100px 10px;
+            }
+
+            .controls-left {
+                gap: 4px;
+            }
+
+            .play-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .time-info {
+                font-size: 11px;
+            }
+
+            .quiz-button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
             .theme-switch {
                 width: 50px;
                 height: 28px;
