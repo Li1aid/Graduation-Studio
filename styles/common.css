@@ -97,7 +97,10 @@ body {
     transition: background 0.5s ease, color 0.5s ease;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: 'Merriweather', serif;
 }
 
@@ -259,12 +262,12 @@ h1, h2, h3, h4 {
 }
 
 /* Dark mode checked state */
-.theme-switch input:checked ~ .slider {
+.theme-switch input:checked~.slider {
     background: var(--dark-grey);
     border-color: var(--border-color);
 }
 
-.theme-switch input:checked ~ .slider::before {
+.theme-switch input:checked~.slider::before {
     content: '🌙';
     transform: translateY(-50%) translateX(28px);
     background: #f0f0f0;
@@ -291,6 +294,13 @@ h1, h2, h3, h4 {
     padding: 0;
 }
 
+/* 未登录状态的头像按钮 */
+.profile-btn.not-logged-in {
+    background: linear-gradient(135deg, rgba(242, 107, 56, 0.15), rgba(242, 107, 56, 0.08));
+    border-color: rgba(242, 107, 56, 0.3);
+    color: var(--primary-orange);
+}
+
 .profile-btn:hover {
     transform: scale(1.1);
     border-color: var(--primary-orange);
@@ -311,9 +321,9 @@ h1, h2, h3, h4 {
     position: fixed;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    width: 320px;
+    width: 240px;
     z-index: 10001;
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
@@ -328,38 +338,24 @@ h1, h2, h3, h4 {
     visibility: visible;
 }
 
-.profile-dropdown::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: 25px;
-    width: 16px;
-    height: 16px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-right: none;
-    border-bottom: none;
-    transform: rotate(45deg);
-}
-
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: 0.75rem;
+    padding: 1rem;
     background: linear-gradient(135deg, rgba(242, 107, 56, 0.1), rgba(242, 107, 56, 0.05));
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
 }
 
 .profile-avatar {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: var(--page-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     color: white;
     box-shadow: 0 4px 15px rgba(242, 107, 56, 0.3);
@@ -379,28 +375,28 @@ h1, h2, h3, h4 {
 }
 
 .profile-name {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
 
 .profile-email {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
 .profile-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    padding: 1.5rem;
+    padding: 1rem;
     background: var(--page-bg);
     border-bottom: 1px solid var(--border-color);
 }
 
 .stat-item {
     text-align: center;
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
     border-right: 1px solid var(--border-color);
 }
 
@@ -410,16 +406,16 @@ h1, h2, h3, h4 {
 
 .stat-value {
     display: block;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--primary-orange);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
     animation: countUp 1s ease-out;
 }
 
 .stat-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -432,15 +428,20 @@ h1, h2, h3, h4 {
 .profile-menu-item {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.9rem 1.2rem;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
     color: var(--text-secondary);
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all 0.2s ease;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     position: relative;
     overflow: hidden;
+}
+
+/* 隐藏菜单项中的emoji */
+.profile-menu-item .menu-icon {
+    display: none;
 }
 
 .profile-menu-item::before {
@@ -480,9 +481,12 @@ h1, h2, h3, h4 {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -493,6 +497,7 @@ h1, h2, h3, h4 {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -650,6 +655,7 @@ h1, h2, h3, h4 {
         opacity: 0;
         transform: translateY(-4px);
     }
+
     to {
         opacity: 1;
         transform: none;
@@ -660,7 +666,7 @@ h1, h2, h3, h4 {
     content: '';
     position: absolute;
     top: -10px;
-    left: 50%;
+    left: var(--arrow-left, 50%);
     transform: translateX(-50%);
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -770,12 +776,40 @@ h1, h2, h3, h4 {
         width: 20px;
     }
 
-    .theme-switch input:checked ~ .slider::before {
+    .theme-switch input:checked~.slider::before {
         transform: translateX(22px);
     }
 
     .profile-btn {
         width: 38px;
         height: 38px;
+    }
+}
+
+/* ============================================
+   MOBILE OPTIMIZATION - AVATAR PAGES
+   ============================================ */
+@media (max-width: 767px) {
+    /* Tag items - reduce font and padding for mobile */
+    .tag-item {
+        font-size: 12px;
+        padding: calc(var(--chip-pad-y) * 0.5) calc(var(--chip-pad-x) * 0.25);
+    }
+    
+    /* Buttons - reduce font size and padding */
+    .btn {
+        padding: 0.6rem 0.9rem;
+        font-size: 13px;
+        white-space: normal;
+    }
+    
+    /* Uploader text - reduce font size */
+    .uploader .title {
+        font-size: 13px;
+        font-weight: 700;
+    }
+    
+    .uploader .hint {
+        font-size: 11px;
     }
 }

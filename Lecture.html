@@ -1261,6 +1261,8 @@
 
             .controls-left {
                 justify-content: center;
+                flex-direction: column;
+                gap: 8px;
             }
 
             .quiz-button {
@@ -1268,6 +1270,28 @@
                 justify-content: center;
                 padding: 12px 24px;
                 font-size: 14px;
+            }
+
+            .play-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+                align-self: center;
+            }
+
+            .time-info {
+                text-align: center;
+                font-size: 14px;
+            }
+
+            .video-wrapper {
+                aspect-ratio: 16 / 9;
+                min-height: 280px;
+            }
+
+            .video-overlay {
+                padding: 20px 20px 80px;
+                opacity: 1;
             }
         }
 
@@ -1367,7 +1391,7 @@
                 <li><a href="Lecture.html" class="nav-link active">Lecture</a></li>
                 <li><a href="Tut.html" class="nav-link">Tutorial</a></li>
                 <li><a href="https://canvas.sydney.edu.au/" target="_blank" class="nav-link">Canvas</a></li>
-                <li><a href="Teamup.html" class="nav-link">TeamUp</a></li>
+                <li><a href="TeamUp.html" class="nav-link">TeamUp</a></li>
             </ul>
 
             <div class="nav-right">
@@ -1588,125 +1612,7 @@
                 }
             })();
         
-        // Create profile dropdown
-       // Create profile dropdown
-        function createProfileDropdown() {
-            // 从 localStorage 读一次，供下拉使用
-            let avatarSrcFromStore = 'assets/avatar3.png';
-            let avatarBgFromStore = '';
-            try {
-                const raw = localStorage.getItem('avatarSelection');
-                if (raw) {
-                    const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
-                    if (avatarSrc) avatarSrcFromStore = avatarSrc;
-                    const bg = bgStyle || bgColor;
-                    if (bg) avatarBgFromStore = bg;
-                }
-            } catch (e) {
-                console.warn('Failed to parse avatarSelection for dropdown', e);
-            }
-
-            const dropdown = document.createElement('div');
-            dropdown.className = 'profile-dropdown';
-            dropdown.innerHTML = `
-    <div class="profile-header">
-      <div class="profile-avatar" ${avatarBgFromStore ? `style="background:${avatarBgFromStore};"` : ''}>
-        <img src="${avatarSrcFromStore}" alt="Aiden Y" class="profile-avatar-img">
-      </div>
-      <div class="profile-info">
-        <h3 class="profile-name">Aiden Y</h3>
-        <p class="profile-email">aiden.y@sydney.edu.au</p>
-      </div>
-    </div>
-    <div class="profile-stats">
-      <div class="stat-item">
-        <span class="stat-value">42</span>
-        <span class="stat-label">Courses</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">98%</span>
-        <span class="stat-label">Progress</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">A+</span>
-        <span class="stat-label">Grade</span>
-      </div>
-    </div>
-    <div class="profile-menu">
-      <a href="#" class="profile-menu-item">
-        <span>👤</span>
-        <span>View Profile</span>
-      </a>
-      <a href="#" class="profile-menu-item">
-        <span>⚙️</span>
-        <span>Settings</span>
-      </a>
-      <a href="#" class="profile-menu-item">
-        <span>📚</span>
-        <span>My Courses</span>
-      </a>
-      <a href="#" class="profile-menu-item">
-        <span>🏆</span>
-        <span>Achievements</span>
-      </a>
-      <div class="profile-divider"></div>
-      <a href="#" class="profile-menu-item logout">
-        <span>🚪</span>
-        <span>Sign Out</span>
-      </a>
-    </div>
-  `;
-            document.body.appendChild(dropdown);
-            return dropdown;
-        }
-
-        
-        // Position dropdown
-        function positionDropdown() {
-            if (!profileDropdown) return;
-            const rect = profileBtn.getBoundingClientRect();
-            profileDropdown.style.top = `${rect.bottom + 10}px`;
-            profileDropdown.style.right = `${window.innerWidth - rect.right}px`;
-        }
-        
-        // Toggle dropdown
-        profileBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (!profileDropdown) {
-                profileDropdown = createProfileDropdown();
-                setTimeout(() => {
-                    profileDropdown.classList.add('show');
-                    positionDropdown();
-                }, 10);
-            } else {
-                if (profileDropdown.classList.contains('show')) {
-                    profileDropdown.classList.remove('show');
-                    setTimeout(() => {
-                        profileDropdown.remove();
-                        profileDropdown = null;
-                    }, 300);
-                } else {
-                    profileDropdown.classList.add('show');
-                    positionDropdown();
-                }
-            }
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (profileDropdown && !profileDropdown.contains(e.target) && e.target !== profileBtn) {
-                profileDropdown.classList.remove('show');
-                setTimeout(() => {
-                    profileDropdown.remove();
-                    profileDropdown = null;
-                }, 300);
-            }
-        });
-        
-        // Update position on window resize
-        window.addEventListener('resize', positionDropdown);
+        // Profile dropdown is handled by scripts/profile.js
 
         // ==================== NAVBAR SCROLL EFFECT ====================
         const navbar = document.getElementById('navbar');
@@ -1894,5 +1800,6 @@
             timeInfo.textContent = `00:00 / ${formatTime(video.duration)}`;
         });
     </script>
+    <script src="scripts/profile.js"></script>
 </body>
 </html>

@@ -3,10 +3,10 @@
  * Coachmark提示系统 - 引导用户创建头像
  */
 
-(function() {
+(function () {
     'use strict';
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const profileAnchor = document.getElementById('profileAnchor') || document.querySelector('.profile-btn');
         const gateLinks = document.querySelectorAll('.gate-link');
 
@@ -47,7 +47,7 @@
             const laterBtn = cmEl.querySelector('#cmLater');
 
             if (createBtn) {
-                createBtn.addEventListener('click', function() {
+                createBtn.addEventListener('click', function () {
                     window.location.href = 'Avatar1.html';
                 });
             }
@@ -61,13 +61,13 @@
             window.addEventListener('scroll', onViewportChange, { passive: true });
 
             // 延迟添加外部点击监听 (避免立即触发)
-            setTimeout(function() {
+            setTimeout(function () {
                 document.addEventListener('click', onDocClick, true);
             }, 0);
         }
 
         // ==================================================
-        // 定位Coachmark到头像按钮下方
+        // 定位Coachmark到头像按钮下方，箭头指向头像
         // ==================================================
         function positionCoachmark(el) {
             if (!profileAnchor) return;
@@ -89,6 +89,15 @@
 
             el.style.top = `${top}px`;
             el.style.left = `${left}px`;
+            
+            // 计算箭头位置：箭头应该指向头像按钮的中心
+            // 按钮中心相对于Coachmark的位置
+            const btnCenterX = rect.left + rect.width / 2;
+            const cmLeftEdge = left + window.scrollX;
+            const arrowLeftPercent = ((btnCenterX - cmLeftEdge) / cmW) * 100;
+            
+            // 设置箭头位置
+            el.style.setProperty('--arrow-left', `${arrowLeftPercent}%`);
         }
 
         // ==================================================
@@ -131,19 +140,19 @@
         // ==================================================
         // 拦截"需要创建头像"的链接点击
         // ==================================================
-        gateLinks.forEach(function(link) {
-            link.addEventListener('click', function(e) {
+        gateLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
 
                 const href = link.getAttribute('href') || '#';
                 const label = link.getAttribute('data-label') || 'this page';
 
-                // 检查是否已有头像 (简化版,可根据实际需求调整)
-                const hasAvatar = localStorage.getItem('selectedAvatar');
+                // 检查是否已有头像 (根据avatarSelection判断)
+                const hasAvatar = localStorage.getItem('avatarSelection');
 
                 if (!hasAvatar) {
                     // 如果没有头像,显示Coachmark
-                    showCoachmark(label, function() {
+                    showCoachmark(label, function () {
                         window.location.href = href;
                     });
                 } else {

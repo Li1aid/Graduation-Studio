@@ -1086,7 +1086,7 @@
         <li><a href="Lecture.html" class="nav-link">Lecture</a></li>
         <li><a href="Tut.html" class="nav-link">Tutorial</a></li>
         <li><a href="https://canvas.sydney.edu.au/" target="_blank" class="nav-link">Canvas</a></li>
-        <li><a href="Teamup.html" class="nav-link active">TeamUp</a></li>
+        <li><a href="TeamUp.html" class="nav-link active">TeamUp</a></li>
       </ul>
 
       <div class="nav-right">
@@ -1207,80 +1207,7 @@
     })();
 
     /* ============ Profile dropdown with entrance animation ============ */
-    const profileBtn = document.querySelector('.profile-btn');
-    let profileDropdown = null;
-
-    function createProfileDropdown() {
-      let avatarSrcFromStore = document.getElementById('profileImg')?.src || 'assets/avatar3.png';
-      let avatarBgFromStore = '';
-      try {
-        const raw = localStorage.getItem('avatarSelection');
-        if (raw) {
-          const { avatarSrc, bgColor, bgStyle } = JSON.parse(raw);
-          if (avatarSrc) avatarSrcFromStore = avatarSrc;
-          const bg = bgStyle || bgColor;
-          if (bg) avatarBgFromStore = bg;
-        }
-      } catch (e) { }
-
-      const dropdown = document.createElement('div');
-      dropdown.className = 'profile-dropdown';
-      dropdown.innerHTML = `
-        <div class="profile-header">
-          <div class="profile-avatar" ${avatarBgFromStore ? `style="background:${avatarBgFromStore};"` : ''}>
-            <img src="${avatarSrcFromStore}" alt="User Avatar" class="profile-avatar-img">
-          </div>
-          <div class="profile-info">
-            <h3 class="profile-name">Aiden Y</h3>
-            <p class="profile-email">aiden.y@sydney.edu.au</p>
-          </div>
-        </div>
-        <div class="profile-stats">
-          <div class="stat-item"><span class="stat-value">42</span><span class="stat-label">Courses</span></div>
-          <div class="stat-item"><span class="stat-value">98%</span><span class="stat-label">Progress</span></div>
-          <div class="stat-item"><span class="stat-value">A+</span><span class="stat-label">Grade</span></div>
-        </div>
-        <div class="profile-menu">
-          <a href="#" class="profile-menu-item">👤 <span>View Profile</span></a>
-          <a href="#" class="profile-menu-item">⚙️ <span>Settings</span></a>
-          <a href="#" class="profile-menu-item">📚 <span>My Courses</span></a>
-          <a href="#" class="profile-menu-item">🏆 <span>Achievements</span></a>
-          <div class="profile-divider"></div>
-          <a href="#" class="profile-menu-item logout">🚪 <span>Sign Out</span></a>
-        </div>
-      `;
-      document.body.appendChild(dropdown);
-      return dropdown;
-    }
-    function positionDropdown() {
-      if (!profileDropdown) return;
-      const rect = profileBtn.getBoundingClientRect();
-      profileDropdown.style.top = `${rect.bottom + 10}px`;
-      profileDropdown.style.right = `${window.innerWidth - rect.right}px`;
-    }
-    profileBtn.addEventListener('click', (e) => {
-      e.preventDefault(); e.stopPropagation();
-      if (!profileDropdown) {
-        profileDropdown = createProfileDropdown();
-        positionDropdown();
-        requestAnimationFrame(() => profileDropdown.classList.add('show')); // 入场
-      } else {
-        if (profileDropdown.classList.contains('show')) {
-          profileDropdown.classList.remove('show');
-          setTimeout(() => { profileDropdown.remove(); profileDropdown = null; }, 280);
-        } else {
-          positionDropdown();
-          requestAnimationFrame(() => profileDropdown.classList.add('show'));
-        }
-      }
-    });
-    document.addEventListener('click', (e) => {
-      if (profileDropdown && !profileDropdown.contains(e.target) && e.target !== profileBtn) {
-        profileDropdown.classList.remove('show');
-        setTimeout(() => { profileDropdown.remove(); profileDropdown = null; }, 280);
-      }
-    });
-    window.addEventListener('resize', positionDropdown);
+    // Profile dropdown is handled by scripts/profile.js
 
     /* ===================== TeamUp logic ===================== */
     try { localStorage.removeItem('favourites'); localStorage.removeItem('teammates'); } catch (e) { }
@@ -1289,7 +1216,7 @@
     function sampleTags(k) { const p = [...TAG_POOL]; for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[p[i], p[j]] = [p[j], p[i]] } return p.slice(0, k) }
 
     const people = [
-      { id: 'u1', name: 'Lilaid Yang', initial: 'A', photo: 'Assets/head1.png', desc: 'Mixed-methods researcher. Diary study enjoyer.', portfolio: '', tags: sampleTags(5) },
+      { id: 'u1', name: 'Aiden Yang', initial: 'A', photo: 'Assets/head1.png', desc: 'Mixed-methods researcher. Diary study enjoyer.', portfolio: '', tags: sampleTags(5) },
       { id: 'u2', name: 'Fan Wu', initial: 'B', photo: 'Assets/head2.png', desc: 'Design systems & prototyping.', portfolio: '', tags: sampleTags(5) },
       { id: 'u3', name: 'Robin Wang', initial: 'C', photo: 'Assets/head3.png', desc: 'Frontend dev. Accessibility advocate.', portfolio: '', tags: sampleTags(5) },
       { id: 'u4', name: 'Beatrice Park', initial: 'D', photo: 'Assets/head4.png', desc: 'Motion & micro-interactions.', portfolio: '', tags: sampleTags(5) },
@@ -1484,6 +1411,6 @@
     // First render
     render();
   </script>
+  <script src="scripts/profile.js"></script>
 </body>
-
 </html>

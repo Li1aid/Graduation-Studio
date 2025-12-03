@@ -390,6 +390,24 @@
         .avatar-grid .avatar-cell:nth-child(9) {
             animation-delay: .45s;
         }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 767px) {
+            .save-box {
+                padding: clamp(8px, 1vw, 10px) clamp(12px, 1.6vw, 14px);
+                font-size: 13px;
+                white-space: normal;
+            }
+
+            .uploader .title {
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+            .uploader .hint {
+                font-size: 10px;
+            }
+        }
     </style>
 </head>
 

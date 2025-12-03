@@ -402,6 +402,25 @@
                 transition: none;
             }
         }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 767px) {
+            .tag-item {
+                font-size: 12px;
+                font-weight: 500;
+                padding: calc(var(--chip-pad-y) * 0.5) calc(var(--chip-pad-x) * 0.25);
+            }
+
+            .btn {
+                padding: 0.6rem 0.9rem;
+                font-size: 13px;
+                white-space: normal;
+            }
+
+            h2 {
+                font-size: clamp(16px, 4vw, 20px);
+            }
+        }
     </style>
 </head>
 
