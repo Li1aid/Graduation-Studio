@@ -1374,26 +1374,28 @@
 
         @media (max-width: 1200px) {
             .nav-menu {
-                display: none;
-            }
-
-            .nav-menu.active {
                 position: fixed;
-                top: 0;
+                top: 60px;
                 left: 0;
                 width: 100%;
                 flex-direction: column;
                 background: var(--bg-card);
-                padding: 120px 1.5rem 2rem;
+                padding: 1.5rem;
                 gap: 0;
                 border-bottom: 1px solid var(--border-color);
                 box-shadow: var(--shadow-lg);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                display: flex;
+                z-index: 9998;
+            }
+
+            .nav-menu.active {
                 transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                display: flex;
-                z-index: 999;
             }
 
             .nav-menu.active li {
@@ -1672,13 +1674,13 @@
                     </label>
                 </div>
                 
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">☰</button>
+
                 <!-- Profile Button -->
                 <a href="#" class="profile-btn" aria-label="User Profile">
                     <img id="profileImg" src="assets/avatar3.png" alt="Profile" class="profile-btn-img">
                 </a>
-
-                <!-- Mobile Menu Button -->
-                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">☰</button>
             </div>
         </nav>
     </header>

@@ -984,12 +984,12 @@
 
       .nav-menu {
         position: fixed;
-        top: 0;
+        top: 60px;
         left: 0;
         width: 100%;
         flex-direction: column;
         background: var(--card-bg);
-        padding: 120px 1.5rem 2rem;
+        padding: 1.5rem;
         gap: 0;
         border-bottom: 1px solid var(--border-color);
         box-shadow: var(--shadow-lg);
@@ -997,15 +997,14 @@
         opacity: 0;
         visibility: hidden;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        display: none;
-        z-index: 999;
+        display: flex;
+        z-index: 9998;
       }
 
       .nav-menu.active {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
-        display: flex;
       }
 
       .nav-menu.active li {
@@ -1148,8 +1147,6 @@
         <img src="Assets\Logo.png" alt="CoLab Logo" class="logo-img">
       </a>
 
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">☰</button>
-
       <ul class="nav-menu" id="navMenu">
         <li><a href="Home_logged.html" class="nav-link">Home</a></li>
         <li><a href="Lecture.html" class="nav-link">Lecture</a></li>
@@ -1159,13 +1156,17 @@
       </ul>
 
       <div class="nav-right">
-        <label class="theme-switch" aria-label="Toggle theme">
-          <input type="checkbox" id="themeToggle">
-          <span class="slider">
-            <span class="slider-icon sun">☀️</span>
-            <span class="slider-icon moon">🌙</span>
-          </span>
-        </label>
+        <div class="theme-switch-wrapper">
+          <label class="theme-switch" aria-label="Toggle theme">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider">
+              <span class="slider-icon sun">☀️</span>
+              <span class="slider-icon moon">🌙</span>
+            </span>
+          </label>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">☰</button>
 
         <!-- 头像按钮（默认有占位图，可被 localStorage 覆盖） -->
         <a href="#" class="profile-btn" aria-label="User Profile">
